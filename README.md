@@ -4,7 +4,7 @@ webshop
 Webapp - shopping site
 
 To do
-- [ ] Function Add Color
+- [X] Function Add Color
 - [ ] Function Add Size
 - [ ] Function Manage Stock
 - [ ] Function Add Product
