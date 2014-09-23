@@ -2,7 +2,7 @@
 class ProductsDetailFields extends Eloquent {
 
 	protected $table = "products_detail_fields";
-	
+	public $timestamps = False;
 	public function fields()
     {
         return $this->morphTo();

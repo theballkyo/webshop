@@ -2,6 +2,7 @@
 class ProductsDetailData extends Eloquent {
 
 	protected $table = "products_detail_data";
+	public $timestamps = False;
 
 	public function Color()
     {
@@ -10,6 +11,6 @@ class ProductsDetailData extends Eloquent {
 
     public function stock()
     {
-    	return $this->hasOne('ProductStock', 'pid');
+    	return $this->hasOne('ProductsStock', 'pid');
     }
 }

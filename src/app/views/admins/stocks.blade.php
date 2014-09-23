@@ -18,6 +18,7 @@
                             <tr>
                                 <th>Color</th>
                                 <th>Stock</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,6 +26,7 @@
                             <tr>
                                 <td>{{$color['text']}}</td>
                                 <td><a href="{{ url('admin/stock/'. $product['id'] .'/'. $color['id'] .'') }}"> ตรวจสอบ Stock</a></td>
+                                <td>Delete</td>
                             </tr>
                             @endforeach
                         </tbody>
