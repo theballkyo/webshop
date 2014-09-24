@@ -17,7 +17,7 @@
                         </div>
                     @endif
                     <p>
-                    <a href=" {{ url('admin/product/'. $product['id'] . '/add/size/')}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
+                    <a href=" {{ url('admin/product/add/size/'. $product['id'])}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
                     </p>
                     <table class="table table-striped table-bordered table-condensed">
                     <thead>

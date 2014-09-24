@@ -14,8 +14,8 @@
                     <hr>
                     @foreach($products as $product)
                         <h3>Name : {{$product['name']}}</h3>
-                        <a href=" {{ url('admin/product/'. $product['id'] .'/add/color')}} " class="btn btn-warning">เพิ่มสีสินค้า</a>
-                        <a href=" {{ url('admin/product/'. $product['id'] . '/add/size/')}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
+                        <a href=" {{ url('admin/product/add/color/'. $product['id'])}} " class="btn btn-warning">เพิ่มสีสินค้า</a>
+                        <a href=" {{ url('admin/product/add/size/'. $product['id'])}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
                         <table class="table table-striped">
                         <thead>
                             <tr>
@@ -30,8 +30,14 @@
                             <tr>
                                 <td><strong>{{$color['text']}}</strong></td>
                                 <td>{{ empty($color['imgurl']) ? '' : '<a target="_blank" href="'. $color['imgurl'] . '"><img src="'. $color['imgurl'] .'"></a>'}}</td>
-                                <td><a href="{{ url('admin/stock/'. $product['id'] .'/'. $color['id']) }}"> ตรวจสอบ Stock</a></td>
-                                <td><a href="{{url('admin/stock/delete/'. $product['id'] .'/'. $color['id']) }}">Delete</a></td>
+                                <td><a href="{{ url('admin/stock/get/'. $product['id'] .'/'. $color['id']) }}"> ตรวจสอบ Stock</a></td>
+                                <td>
+                                    <form method="post" action="{{url('admin/stock/delete/'.$color['id'])}}"
+                                    onsubmit="return confirm('คุณต้องการลบสีนี้หรือเปล่า ?');">
+                                    <button class="btn btn-inverse">Delete</button>
+                                    {{Form::token()}}
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

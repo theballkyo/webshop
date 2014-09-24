@@ -23,13 +23,15 @@ Route::get('/user/logout', 'UserController@getLogout');
 
 Route::get('/admin/', 'AdminController@Index');
 Route::get('/admin/stocks', 'AdminController@getStocks');
-Route::get('/admin/stock/{pid}/{color}', 'AdminController@getStock');
-Route::post('/admin/stock/{pid}/{color}', 'AdminController@postStock');
+Route::get('/admin/stock/get/{pid}/{color}', 'AdminController@getStock');
+Route::post('/admin/stock/get/{pid}/{color}', 'AdminController@postStock');
 Route::get('/admin/products', 'AdminController@getProducts');
-Route::get('/admin/product/{pid}/add/color', 'AdminController@getAddColor');
-Route::post('/admin/product/{pid}/add/color', 'AdminController@postAddColor');
-Route::get('/admin/product/{pid}/add/size', 'AdminController@getAddSize');
-Route::post('/admin/product/{pid}/add/size', 'AdminController@postAddSize');
+Route::get('/admin/product/add/color/{pid}', 'AdminController@getAddColor');
+Route::post('/admin/product/add/color/{pid}', 'AdminController@postAddColor');
+Route::get('/admin/product/add/size/{pid}', 'AdminController@getAddSize');
+Route::post('/admin/product/add/size/{pid}', 'AdminController@postAddSize');
+Route::get('/admin/stock/delete/{color}', 'AdminController@getDeleteStock');
+Route::post('/admin/stock/delete/{color}', 'AdminController@postDeleteStock');
 Route::get('/admin/product/new', 'AdminController@getProductNew');
 
 Route::post('admin/product/save', 'AdminController@postProductSave');

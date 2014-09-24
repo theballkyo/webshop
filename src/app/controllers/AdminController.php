@@ -144,19 +144,19 @@ class AdminController extends BaseController{
 
 		if(Input::has('price')){
 			$price = (int) abs(Input::get('price'));
-			$res = $this->updatePrice($code, $price);
+			$res = $this->updatePrice($price);
 		}
 		if(Input::has('add')){
 			$num = (int) abs(Input::get('add'));
-			$res = $this->updateStock($code, $num, 'plus');
+			$res = $this->updateStock($num, 'plus');
 		}
 		elseif(Input::has('del')){
 			$num = (int) -abs(Input::get('del'));
-			$res = $this->updateStock($code, $num, 'plus');
+			$res = $this->updateStock($num, 'plus');
 		}
 		elseif(Input::has('update')){
 			$num = (int) Input::get('update');
-			$res = $this->updateStock($code, $num, 'set');
+			$res = $this->updateStock($num, 'set');
 		}
 		elseif(Input::has('show')){
 			$this->stock->show = Input::get('show');
@@ -260,7 +260,7 @@ class AdminController extends BaseController{
 		return View::make('admins.add.size', array('errors' => $validator->messages()));
 	}
 
-	private function updateStock($code, $num, $type='set')
+	private function updateStock($num, $type='set')
 	{
 		if($type == 'set')
 		{
@@ -273,7 +273,7 @@ class AdminController extends BaseController{
 		return True;
 	}
 
-	private function updatePrice($code, $price)
+	private function updatePrice($price)
 	{
 		$this->stock->price = $price;
 		$this->stock->save();
@@ -287,6 +287,8 @@ class AdminController extends BaseController{
 	 */
 	private function loadStockInDB($code)
 	{
+		if(!empty($this->stock))
+			return $this->stock;
 		$this->stock = ProductsStock::where('code', '=', $code)->first();
 		#If empty, create new
 		if(empty($this->stock))
