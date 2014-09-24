@@ -275,6 +275,21 @@ class AdminController extends BaseController{
 		return Redirect::action('AdminController@getStocks');
 	}
 
+	/**
+	 * Post Delete size
+	 * Delete size from product
+	 * Return Void
+	 */
+	public function postDeleteSize($size)
+	{
+		$detail = ProductsDetailData::find($size);
+		if(!empty($size))
+		{
+			$detail->delete();
+		}
+		return Redirect::action('AdminController@getStocks');
+	}
+
 	private function updateStock($num, $type='set')
 	{
 		if($type == 'set')
