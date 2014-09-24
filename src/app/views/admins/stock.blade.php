@@ -70,9 +70,12 @@
                                 <td>
                                     <form method="post" class="form-horizontal row-fluid">
                                     <label class="checkbox inline">
-                                    <input type="checkbox" value="" onChange="this.form.submit()">
+                                    <input type="hidden" name="show" value="0" />
+                                    <input name="show" type="checkbox" value="1" onChange="this.form.submit()"
+                                    {{ $size['show'] == '1' ? 'checked' : ''}}>
                                         Show ?
                                     </label>
+                                    <input type="hidden" name="size_id" value="{{$size['id']}}">
                                     {{ Form::token() }}
                                     </form>
                                 </td>

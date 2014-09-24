@@ -3,6 +3,7 @@
 class AdminController extends BaseController{
 
 	private $pid = 0;
+	private $stock;
 
 	public function __construct()
     {
@@ -137,22 +138,31 @@ class AdminController extends BaseController{
 	public function postStock($pid, $color)
 	{
 		$code = implode(',', array($color, Input::get('size_id')));
-		if(input::has('price')){
+
+		# Load stock in database
+		$this->loadStockInDB($code);
+
+		if(Input::has('price')){
 			$price = (int) abs(Input::get('price'));
 			$res = $this->updatePrice($code, $price);
 		}
-		if(input::has('add')){
+		if(Input::has('add')){
 			$num = (int) abs(Input::get('add'));
 			$res = $this->updateStock($code, $num, 'plus');
 		}
-		elseif(input::has('del')){
+		elseif(Input::has('del')){
 			$num = (int) -abs(Input::get('del'));
 			$res = $this->updateStock($code, $num, 'plus');
 		}
-		elseif(input::has('update')){
+		elseif(Input::has('update')){
 			$num = (int) Input::get('update');
 			$res = $this->updateStock($code, $num, 'set');
 		}
+		elseif(Input::has('show')){
+			$this->stock->show = Input::get('show');
+			$this->stock->save();
+		}
+
 		return Redirect::action('AdminController@getStock', array('pid' => $pid, 'color' => $color));
 	}
 
@@ -252,42 +262,43 @@ class AdminController extends BaseController{
 
 	private function updateStock($code, $num, $type='set')
 	{
-		$stock = ProductsStock::where('code', '=', $code)->first();
-		if(empty($stock))
-		{
-			$stock = New ProductsStock;
-			$stock->stock = 0;
-			$stock->code = $code;
-			$stock->price = 0;
-			$stock->show = 0;
-			$stock->pid = Route::input('pid');
-		}
 		if($type == 'set')
 		{
-			$stock->stock = $num;
+			$this->stock->stock = $num;
 		}elseif($type == 'plus')
 		{
-			$stock->stock += $num;			
+			$this->stock->stock += $num;			
 		}
-		$stock->save();
+		$this->stock->save();
 		return True;
 	}
 
 	private function updatePrice($code, $price)
 	{
-		$stock = ProductsStock::where('code', '=', $code)->first();
-		if(empty($stock))
-		{
-			$stock = New ProductsStock;
-			$stock->stock = 0;
-			$stock->code = $code;
-			$stock->price = 0;
-			$stock->show = 0;
-			$stock->pid = Route::input('pid');
-		}
-		$stock->price = $price;
-		$stock->save();
+		$this->stock->price = $price;
+		$this->stock->save();
 		return True;
 	}
-
+	/**
+	 * Load stock in DB
+	 * if stock not in DB, this function will create defualt stock
+	 * Assign var $this->stock = Stock model
+	 * Return Stock Model
+	 */
+	private function loadStockInDB($code)
+	{
+		$this->stock = ProductsStock::where('code', '=', $code)->first();
+		#If empty, create new
+		if(empty($this->stock))
+		{
+			$this->stock = New ProductsStock;
+			$this->stock->stock = 0;
+			$this->stock->code = $code;
+			$this->stock->price = 0;
+			$this->stock->show = 0;
+			$this->stock->pid = Route::input('pid');
+			$this->stock->save();
+		}
+		return $this->stock;
+	}
 }
