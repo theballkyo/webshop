@@ -20,6 +20,7 @@
                         <thead>
                             <tr>
                                 <th>Color</th>
+                                <th style="width:20%;">Image</th>
                                 <th>Stock</th>
                                 <th></th>
                             </tr>
@@ -28,6 +29,7 @@
                             @foreach($product['detail']['datas'] as $color)
                             <tr>
                                 <td><strong>{{$color['text']}}</strong></td>
+                                <td>{{ empty($color['imgurl']) ? '' : '<a target="_blank" href="'. $color['imgurl'] . '"><img src="'. $color['imgurl'] .'"></a>'}}</td>
                                 <td><a href="{{ url('admin/stock/'. $product['id'] .'/'. $color['id']) }}"> ตรวจสอบ Stock</a></td>
                                 <td><a href="{{url('admin/stock/delete/'. $product['id'] .'/'. $color['id']) }}">Delete</a></td>
                             </tr>
