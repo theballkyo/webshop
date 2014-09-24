@@ -1,7 +1,7 @@
 <?php
 class Products extends Eloquent{
 
-	protected $table = "Products";
+	protected $table = "products";
 	public $timestamps = False;
 	public function fields()
 	{
