@@ -98,6 +98,7 @@ class AdminController extends BaseController{
 		$i = 0;
 		foreach ($product['size'] as $size) {
 			$code = implode(',', array($color, $product['size'][$i]['id']));
+			$code = implode(':', array($pid, $code));
 			#print $code;
 			$stock = ProductsStock::where('code', '=', $code)->first();
 			if(empty($stock))
@@ -138,9 +139,10 @@ class AdminController extends BaseController{
 	public function postStock($pid, $color)
 	{
 		$code = implode(',', array($color, Input::get('size_id')));
-
+		$code = implode(':', array($pid, $code));
 		# Load stock in database
-		$this->loadStockInDB($code);
+		$this->loadStockInDB($pid, $code);
+
 
 		if(Input::has('price')){
 			$price = (int) abs(Input::get('price'));
@@ -315,10 +317,12 @@ class AdminController extends BaseController{
 	 * Assign var $this->stock = Stock model
 	 * Return Stock Model
 	 */
-	private function loadStockInDB($code)
+	private function loadStockInDB($pid, $code)
 	{
 		if(!empty($this->stock))
 			return $this->stock;
+		if(Products::find($pid)->count() < 1)
+			return False;
 		$this->stock = ProductsStock::where('code', '=', $code)->first();
 		#If empty, create new
 		if(empty($this->stock))
@@ -328,7 +332,7 @@ class AdminController extends BaseController{
 			$this->stock->code = $code;
 			$this->stock->price = 0;
 			$this->stock->show = 0;
-			$this->stock->pid = Route::input('pid');
+			$this->stock->pid = $pid;
 			$this->stock->save();
 		}
 		return $this->stock;
