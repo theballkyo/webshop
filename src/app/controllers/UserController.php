@@ -24,9 +24,13 @@ class UserController extends BaseController{
 		$password = Input::get('password');
 		if(Auth::attempt(array('username' => $username, 'password' => $password)))
 		{
+			if(Auth::user()->status == -1)
+			{
+				return View::make('user.getLogin', array('error_msg' => 'This user can\'t login.'));
+			}
 			return Redirect::to('user/login');
 		}
-		return View::make('user/getLogin', array('error_msg' => 'Username or passwor not correct!'));
+		return View::make('user.getLogin', array('error_msg' => 'Username or passwor not correct!'));
 	}
 
 	public function getRegister()
@@ -35,7 +39,7 @@ class UserController extends BaseController{
 		{
 			return Redirect::to('/');
 		}
-		return View::make('user/getRegister');
+		return View::make('user.getRegister');
 	}
 
 	public function postRegister()
@@ -54,7 +58,7 @@ class UserController extends BaseController{
 
 		if(Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password'))))
 		{
-			return Redirect::to('user/login');
+			return Redirect::to('user.login');
 		}
 	}
 
