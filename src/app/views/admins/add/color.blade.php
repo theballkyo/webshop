@@ -27,20 +27,29 @@
 
                     <form action="" method="post" class="form-horizontal row-fluid">
                         <div class="control-group">
-                        <label class="control-label" for="color">Color</label>
-                        <div class="controls">
-                            <input id="color" name="color" type="text" class="span8">
-                            @if($errors->has('color'))
-                            <span class="help-inline alert">{{ $errors->first('color') }}</span>
-                            @endif
+                            <label class="control-label" for="color">Color *</label>              
+                            <div class="controls">
+                                <input id="color" name="color" type="text" class="span8">
+                                @if($errors->has('color'))
+                                <span class="help-inline alert">{{ $errors->first('color') }}</span>
+                                @endif
+                            </div>
                         </div>
-                        {{ Form::token() }}
+                        <div class="control-group">
+                            <label class="control-label" for="color_img">Color Image</label>
+                            <div class="controls">
+                                <input id="color_img" name="color_img" type="text" class="span8">
+                                @if($errors->has('color_img'))
+                                <span class="help-inline alert">{{ $errors->first('color_img') }}</span>
+                                @endif
+                            </div>
                         </div>
                         <div class="control-group">
                             <div class="controls">
                                 <button type="submit" class="btn btn-large btn-success">เพิ่มสี</button>
                             </div>
                         </div>
+                        {{ Form::token() }}
                     </form>
                 </div>
             </div>

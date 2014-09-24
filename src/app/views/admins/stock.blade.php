@@ -7,7 +7,7 @@
             <div class="module">
                 <div class="module-head">
                 <h3>
-                Welcome ,{{ Auth::user()->username }}</h3>
+                Welcome Eiei,{{ Auth::user()->username }}</h3>
                 </div>
                 <div class="module-body">
                     @if(Session::has('msg.type'))
@@ -17,11 +17,11 @@
                         </div>
                     @endif
                     <a href=" {{ url('admin/product/'. $product['id'] .'/'. $product['color'] .'/add/size/')}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <th>Size</th>
-                            <th>Stock</th>
+                            <th style="width:10%">Size</th>
+                            <th style="width:10%">Stock</th>
                             <th colspan="4" class="text-center">Edit</th>
                         </tr>
                     </thead>
@@ -30,15 +30,23 @@
                            <tr id="{{$size['id']}}">
                                 <td>{{$size['text']}}</td>
                                 <td>{{$size['stock']}}</td>
-                                <form method="post">
-                                <td><input name="add" type="text" value="0"><br>
+                                <form method="post" class="form-horizontal row-fluid">
+                                <td><input name="add" type="text" value="0" class="span1">
                                     <button type="submit" class="btn btn-primary">เพิ่ม</button>
                                 </td>
-                                <td><input name="del" type="text" value="0"><br>
-                                    <a href="#" class="btn btn-primary">ลด</a>
+                                {{ Form::token() }}
+                                <input type="hidden" name="size_id" value="{{$size['id']}}">
+                                </form>
+                                <form method="post" class="form-horizontal row-fluid">
+                                <td><input name="del" type="text" value="0" class="span1">
+                                    <button type="submit" class="btn btn-primary">ลด</button>
                                 </td>
-                                <td><input name="update" type="text" value="{{$size['stock']}}"><br>
-                                    <a href="#" class="btn btn-primary">แก้ไข</a>
+                                {{ Form::token() }}
+                                <input type="hidden" name="size_id" value="{{$size['id']}}">
+                                </form>
+                                <form method="post" class="form-horizontal row-fluid">
+                                <td><input name="update" type="text" value="{{$size['stock']}}" class="span1">
+                                    <button type="submit" class="btn btn-primary">แก้ไข</button>
                                 </td>
                                 {{ Form::token() }}
                                 <input type="hidden" name="size_id" value="{{$size['id']}}">
@@ -48,6 +56,7 @@
                         @endforeach
                     </tbody>
                     </table>
+                </div>
             </div>
         </div>
     </div>

@@ -49,31 +49,38 @@ class AdminController extends BaseController{
 
 	public function getStocks()
 	{
-		$products = Products::all()
-					->toArray();
+		$products = Products::all()->toArray();
+
+		# Index products
 		$i = 0;
 		foreach($products as $product)
 		{
 			$pid = $product['id'];
+
+			# Get color in product
 			$products[$i]['detail'] = ProductsDetailFields::with(array('datas' => function($query) use ($pid)
 			{
 				$query->join('products_detail_fields', 'products_detail_fields.id', '=', 'products_detail_data.fid')
 					->where('products_detail_data.pid', '=', $pid)
 					->select(
-						'products_detail_data.pid',
+						#'products_detail_data.pid',
 						'products_detail_data.fid',
 						'products_detail_data.text',
 						'products_detail_data.imgurl',
 						'products_detail_data.id'
-						);
-			}
-			))
-						->where('name', '=', 'color')
-						->first()
-						->toArray();
+					);
+			}))
+			->where('name', '=', 'color')
+			->first()
+			->toArray();
+
 			$i++;
 		}
-		print_r ($products);
+		// Debug !
+		#print '<pre>';
+		#print_r ($products);
+		#print '</pre>';
+
 		return View::make('admins.stocks', array('products' => $products));
 	}
 
@@ -106,14 +113,13 @@ class AdminController extends BaseController{
 
 		$product['color'] = $color;
 		#print '<pre>';
-		print_r($product);
+		#print_r($product);
 
 		return View::make('admins.stock', array('product' => $product));
 	}
 
 	public function getAddColor($pid)
 	{
-		Session::forget('msg');
 		$product = Products::find($pid)->toArray();
 		
 		return View::make('admins.add.color', array('product' => $product));
@@ -127,33 +133,32 @@ class AdminController extends BaseController{
 	public function postStock($pid, $color)
 	{
 		$code = implode(',', array($color, Input::get('size_id')));
-		if(!is_numeric(Input::get('add')))
-		{
-			Session::flash('msg.type', 'number');
+		if(input::has('add')){
+			$num = (int) abs(Input::get('add'));
+			$res = $this->updateStock($code, $num, 'plus');
 		}
-		else
-		{
-			if(input::has('add')){
-				$num = (int) abs(Input::get('add'));
-				$res = $this->updateStock($code, $num, 'plus');
-			}
-			elseif(input::has('del')){
-				$num = (int) -abs(Input::get('del'));
-				$res = $this->updateStock($code, $num, 'plus');
-			}
-			elseif(input::has('update')){
-				$num = (int) Input::get('update');
-				$res = $this->updateStock($code, $num, 'set');
-			}
+		elseif(input::has('del')){
+			$num = (int) -abs(Input::get('del'));
+			$res = $this->updateStock($code, $num, 'plus');
+		}
+		elseif(input::has('update')){
+			$num = (int) Input::get('update');
+			$res = $this->updateStock($code, $num, 'set');
 		}
 		return Redirect::action('AdminController@getStock', array('pid' => $pid, 'color' => $color));
 	}
 
 	public function postAddColor($pid)
 	{
+		Session::flash('msg', '');
 		$validator = Validator::make(
-			array('color' => Input::get('color')),
-			array('color' => 'required')
+			array(
+				'color' => Input::get('color'),
+			),
+
+			array(
+				'color' => 'required'
+			)
 		);
 		# Validator input
 		if($validator->fails())
@@ -186,13 +191,55 @@ class AdminController extends BaseController{
 				Session::flash('msg.type', 'success');
 			}
 		}
-		#View::share('errors', $validator->messages());
+		View::share('errors', $validator->messages());
 		return View::make('admins.add.color', array('errors' => $validator->messages()));
 	}
 
 	public function postAddSize($pid)
 	{
-		$size = Input::get('size');
+		Session::flash('msg', '');
+		$validator = Validator::make(
+			array(
+				'size' => Input::get('size'),
+			),
+
+			array(
+				'size' => 'required'
+			)
+		);
+		# Validator input
+		if($validator->fails())
+		{
+			Session::flash('msg.type', 'validator');
+		}
+		# Check is has product in database
+		elseif(Products::find($pid)->count() < 1)
+		{
+			Session::flash('msg.type', 'error');
+		}
+		else
+		{	# For size ; fid = 2
+			# Check already size
+			if(ProductsDetailData::where('fid', '=', 2)
+				->where('pid', '=', $pid)
+				->where('text', '=', Input::get('size'))->count() > 0)
+			{
+				$validator->messages()->add('color', 'Size is already used.');
+				Session::flash('msg.type', 'exist');
+			}
+			else
+			{
+				$detail = New ProductsDetailData;
+				$detail->pid = $pid;
+				# Field color id = 2
+				$detail->fid = 2;
+				$detail->text = Input::get('size');
+				$detail->save();
+				Session::flash('msg.type', 'success');
+			}
+		}
+		View::share('errors', $validator->messages());
+		return View::make('admins.add.color', array('errors' => $validator->messages()));
 	}
 
 	private function updateStock($code, $num, $type='set')
@@ -200,16 +247,16 @@ class AdminController extends BaseController{
 		$stock = ProductsStock::where('code', '=', $code)->first();
 		if(empty($stock))
 		{
-			print 33;
 			$stock = New ProductsStock;
 			$stock->stock = 0;
 			$stock->code = $code;
 			$stock->pid = Route::input('pid');
 		}
-		if($type == 'set'){
-			print 1;
+		if($type == 'set')
+		{
 			$stock->stock = $num;
-		}elseif($type == 'plus'){
+		}elseif($type == 'plus')
+		{
 			$stock->stock += $num;			
 		}
 		$stock->save();

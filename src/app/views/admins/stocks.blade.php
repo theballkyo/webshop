@@ -24,15 +24,16 @@
                         <tbody>
                             @foreach($product['detail']['datas'] as $color)
                             <tr>
-                                <td>{{$color['text']}}</td>
-                                <td><a href="{{ url('admin/stock/'. $product['id'] .'/'. $color['id'] .'') }}"> ตรวจสอบ Stock</a></td>
-                                <td>Delete</td>
+                                <td><strong>{{$color['text']}}</strong></td>
+                                <td><a href="{{ url('admin/stock/'. $product['id'] .'/'. $color['id']) }}"> ตรวจสอบ Stock</a></td>
+                                <td><a href="{{url('admin/stock/delete/'. $product['id'] .'/'. $color['id']) }}">Delete</a></td>
                             </tr>
                             @endforeach
                         </tbody>
                         </table>
                         <hr>
                     @endforeach
+                </div>
             </div>
         </div>
     </div>
