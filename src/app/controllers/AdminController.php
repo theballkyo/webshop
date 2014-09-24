@@ -101,19 +101,23 @@ class AdminController extends BaseController{
 			$stock = ProductsStock::where('code', '=', $code)->first();
 			if(empty($stock))
 			{
-				$stock = 0;
+				$stock = New ProductsStock;
+				$stock->code = $code;
+				$stock->stock = 0;
+				$stock->show = 0;
+				$stock->price = 0;
+				$stock->pid = $pid;
+				$stock->save();
 			}
-			else
-			{
-				$stock = $stock->stock;
-			}
-			$product['size'][$i]['stock'] = $stock;
+			$product['size'][$i]['stock'] = $stock->stock;
+			$product['size'][$i]['price'] = $stock->price;
+			$product['size'][$i]['show']  = $stock->show;
 			$i++;
 		}
 
 		$product['color'] = $color;
 		#print '<pre>';
-		#print_r($product);
+		print_r($product);
 
 		return View::make('admins.stock', array('product' => $product));
 	}
@@ -133,6 +137,10 @@ class AdminController extends BaseController{
 	public function postStock($pid, $color)
 	{
 		$code = implode(',', array($color, Input::get('size_id')));
+		if(input::has('price')){
+			$price = (int) abs(Input::get('price'));
+			$res = $this->updatePrice($code, $price);
+		}
 		if(input::has('add')){
 			$num = (int) abs(Input::get('add'));
 			$res = $this->updateStock($code, $num, 'plus');
@@ -239,7 +247,7 @@ class AdminController extends BaseController{
 			}
 		}
 		View::share('errors', $validator->messages());
-		return View::make('admins.add.color', array('errors' => $validator->messages()));
+		return View::make('admins.add.size', array('errors' => $validator->messages()));
 	}
 
 	private function updateStock($code, $num, $type='set')
@@ -250,6 +258,8 @@ class AdminController extends BaseController{
 			$stock = New ProductsStock;
 			$stock->stock = 0;
 			$stock->code = $code;
+			$stock->price = 0;
+			$stock->show = 0;
 			$stock->pid = Route::input('pid');
 		}
 		if($type == 'set')
@@ -259,6 +269,23 @@ class AdminController extends BaseController{
 		{
 			$stock->stock += $num;			
 		}
+		$stock->save();
+		return True;
+	}
+
+	private function updatePrice($code, $price)
+	{
+		$stock = ProductsStock::where('code', '=', $code)->first();
+		if(empty($stock))
+		{
+			$stock = New ProductsStock;
+			$stock->stock = 0;
+			$stock->code = $code;
+			$stock->price = 0;
+			$stock->show = 0;
+			$stock->pid = Route::input('pid');
+		}
+		$stock->price = $price;
 		$stock->save();
 		return True;
 	}

@@ -28,8 +28,8 @@ Route::post('/admin/stock/{pid}/{color}', 'AdminController@postStock');
 Route::get('/admin/products', 'AdminController@getProducts');
 Route::get('/admin/product/{pid}/add/color', 'AdminController@getAddColor');
 Route::post('/admin/product/{pid}/add/color', 'AdminController@postAddColor');
-Route::get('/admin/product/{pid}/{color}/add/size', 'AdminController@getAddSize');
-Route::post('/admin/product/{pid}/{color}/add/size', 'AdminController@postAddSize');
+Route::get('/admin/product/{pid}/add/size', 'AdminController@getAddSize');
+Route::post('/admin/product/{pid}/add/size', 'AdminController@postAddSize');
 Route::get('/admin/product/new', 'AdminController@getProductNew');
 
 Route::post('admin/product/save', 'AdminController@postProductSave');

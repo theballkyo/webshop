@@ -11,8 +11,11 @@
                 </div>
                 <div class="module-body">
                     <h2><a href="#" class="btn btn-primary btn-large">เพิ่มสินค้าใหม่</a></h2>
+                    <hr>
                     @foreach($products as $product)
-                        <h3>Name : {{$product['name']}}</h3><a href=" {{ url('admin/product/'. $product['id'] .'/add/color')}} " class="btn btn-warning">เพิ่มสีสินค้า</a>
+                        <h3>Name : {{$product['name']}}</h3>
+                        <a href=" {{ url('admin/product/'. $product['id'] .'/add/color')}} " class="btn btn-warning">เพิ่มสีสินค้า</a>
+                        <a href=" {{ url('admin/product/'. $product['id'] . '/add/size/')}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
                         <table class="table table-striped">
                         <thead>
                             <tr>

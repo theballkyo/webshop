@@ -24,7 +24,10 @@
                         @endif
                     </div>
                     @endif
-
+                    <div class="alert {{ Session::get('msg.type') }}">
+                    	<strong>คำแนะนำ :: </strong>
+                    	การเพิ่ม size สินค้านี้จะทำการเพิ่มไปยังทุกสีของรายการสินค้านี้ แต่คุณสามารถสั่งไม่ให้โชว์ได้ในหน้าตรวจสอบ stock
+                    </div>
                     <form action="" method="post" class="form-horizontal row-fluid">
                         <div class="control-group">
                             <label class="control-label" for="size">Size *</label>              
