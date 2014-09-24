@@ -30,8 +30,10 @@ Route::get('/admin/product/add/color/{pid}', 'AdminController@getAddColor');
 Route::post('/admin/product/add/color/{pid}', 'AdminController@postAddColor');
 Route::get('/admin/product/add/size/{pid}', 'AdminController@getAddSize');
 Route::post('/admin/product/add/size/{pid}', 'AdminController@postAddSize');
-Route::get('/admin/stock/delete/{color}', 'AdminController@getDeleteStock');
-Route::post('/admin/stock/delete/{color}', 'AdminController@postDeleteStock');
+Route::get('/admin/stock/delete/color/{color}', 'AdminController@getDeleteColor');
+Route::post('/admin/stock/delete/color/{color}', 'AdminController@postDeleteColor');
+Route::get('/admin/stock/delete/size/{size}', 'AdminController@getDeleteSize');
+Route::post('/admin/stock/delete/size/{size}', 'AdminController@postDeleteSize');
 Route::get('/admin/product/new', 'AdminController@getProductNew');
 
 Route::post('admin/product/save', 'AdminController@postProductSave');

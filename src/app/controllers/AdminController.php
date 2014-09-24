@@ -71,8 +71,8 @@ class AdminController extends BaseController{
 						'products_detail_data.id'
 					);
 			}))
-			->where('name', '=', 'color')
-			->first()
+			#->where('name', '=', 'color')
+			->get()
 			->toArray();
 
 			$i++;
@@ -258,6 +258,21 @@ class AdminController extends BaseController{
 		}
 		View::share('errors', $validator->messages());
 		return View::make('admins.add.size', array('errors' => $validator->messages()));
+	}
+
+	/**
+	 * Post Delete color
+	 * Delete color from product
+	 * Return Void
+	 */
+	public function postDeleteColor($color)
+	{
+		$detail = ProductsDetailData::find($color);
+		if(!empty($detail))
+		{
+			$detail->delete();
+		}
+		return Redirect::action('AdminController@getStocks');
 	}
 
 	private function updateStock($num, $type='set')
