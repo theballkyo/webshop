@@ -135,6 +135,20 @@ class AdminController extends BaseController{
 		return View::make('admins.add.size');
 	}
 
+	/**
+	 * Show customer profile
+	 * 
+	 */
+	public function getCustumer()
+	{
+
+	}
+
+	/**
+	 * Post -> Update product stock
+	 * Price, Stock, Show 
+	 *
+	 */
 	public function postStock($pid, $color)
 	{
 		$code = implode(',', array($pid, $color, Input::get('size_id')));
