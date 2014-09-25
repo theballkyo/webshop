@@ -97,8 +97,7 @@ class AdminController extends BaseController{
 		# Get stock
 		$i = 0;
 		foreach ($product['size'] as $size) {
-			$code = implode(',', array($color, $product['size'][$i]['id']));
-			$code = implode(':', array($pid, $code));
+			$code = implode(',', array($pid, $color, $product['size'][$i]['id']));
 			#print $code;
 			$stock = ProductsStock::where('code', '=', $code)->first();
 			if(empty($stock))
@@ -138,8 +137,7 @@ class AdminController extends BaseController{
 
 	public function postStock($pid, $color)
 	{
-		$code = implode(',', array($color, Input::get('size_id')));
-		$code = implode(':', array($pid, $code));
+		$code = implode(',', array($pid, $color, Input::get('size_id')));
 		# Load stock in database
 		$this->loadStockInDB($pid, $code);
 
