@@ -136,12 +136,23 @@ class AdminController extends BaseController{
 	}
 
 	/**
-	 * Show customer profile
+	 * Show all customer profile
 	 * 
 	 */
-	public function getCustumer()
+	public function getAllCustomer()
 	{
+		$cus_users = CustomerProfile::all();
+		return View::make('admins.customer.index', array('cus_users' => $cus_users));
+	}
 
+	/**
+	 * Show customer profile by ID
+	 *
+	 */
+	public function getCustomer($id)
+	{
+		$cus_user = CustomerProfile::find($id);
+		return View::make('admins.customer.view', array('cus_user' => $cus_user));
 	}
 
 	/**
