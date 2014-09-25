@@ -33,8 +33,23 @@ class BaseController extends Controller {
 		return $detail;
 	}
 
-	 protected function detailProduct($pid, $data_id)
-	 {
+	protected function loadProductFromCode($code)
+	{
+		$code = explode(',', $code);
+		$pid = $code[0];
+		unset($code[0]);
+		$product = Products::find($pid)->first()->toArray();
+		$product['detail'] = $this->detailProduct($pid, $code);
+		return $product;
+	}
+
+	protected function detailPDFromCode($code)
+	{
+		#$detail = Products
+	}
+
+	protected function detailProduct($pid, $data_id)
+	{
 	 	$detail = ProductsDetailFields::with(array('data' => function($query) use ($pid, $data_id)
 		{
 			$query->join('products_detail_fields', 'products_detail_fields.id', '=', 'products_detail_data.fid')
@@ -52,7 +67,7 @@ class BaseController extends Controller {
 					->get()
 					->toArray();
 		return $detail;
-	 }
+	}
 
 	 protected function stockProduct($code)
 	 {

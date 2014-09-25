@@ -152,7 +152,24 @@ class AdminController extends BaseController{
 	public function getCustomer($id)
 	{
 		$cus_user = CustomerProfile::find($id);
-		return View::make('admins.customer.view', array('cus_user' => $cus_user));
+		$cus_reserve = ProductsReserve::join('products_stock', 'products_stock.id',
+												'=', 'products_reserve.stock_id')
+										->where('cus_id', '=', $id)
+										->get();
+
+		$count = $cus_reserve->count();
+		# Convert object to array because it want to select index
+		$cus_reserve = $cus_reserve->toArray();
+
+		for($i=0;$i<$count;$i++)
+		{
+			$cus_reserve[$i]['product'] = $this->loadProductFromCode($cus_reserve[$i]['code']);
+		}
+		return View::make('admins.customer.view', array(
+											'cus_user' => $cus_user,
+											'cus_reserve' => $cus_reserve,
+											#'products' => $products
+											));
 	}
 
 	/**
