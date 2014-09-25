@@ -173,6 +173,75 @@ class AdminController extends BaseController{
 	}
 
 	/**
+	 * Add customer profile viewer
+	 *
+	 */
+	public function getAddCustomer()
+	{
+		return View::make('admins.customer.add');
+	}
+
+	/**
+	 * POST customer profile
+	 * Insert customer profile to DB
+	 *
+	 */
+	public function postAddCustomer()
+	{
+		$validator = Validator::make(
+						Input::all(),
+						array(
+							'name' => 'required'
+						)
+		);
+		# Validator input
+		if($validator->fails())
+		{
+			return View::make('admins.customer.add')->withErrors($validator->messages());
+		}
+
+		$customer = New CustomerProfile;
+		$customer->name = Input::get('name');
+		$customer->address = Input::get('address');
+		$customer->email = Input::get('email');
+		$customer->tel = Input::get('tel');
+		$customer->note = Input::get('note');
+		$customer->save();
+		Session::flash('success', '');
+		return View::make('admins.customer.add');
+	}
+
+	/**
+	 * POST -> Update customer profile
+	 *
+	 */
+	public function postCustomer($id)
+	{
+		$validator = Validator::make(
+						Input::all(),
+						array(
+							'name' => 'required'
+						)
+		);
+
+		# Validator input
+		if($validator->fails())
+		{
+			return Redirect::action('AdminController@getCustomer', array($id))->withErrors($validator->messages());
+		}
+
+		$customer = CustomerProfile::find($id);
+		$customer->name = Input::get('name');
+		$customer->address = Input::get('address');
+		$customer->email = Input::get('email');
+		$customer->tel = Input::get('tel');
+		$customer->note = Input::get('note');
+		$customer->save();
+		Session::flash('success', '');
+		return Redirect::action('AdminController@getCustomer', array($id));
+	}
+
+	/**
 	 * Post -> Update product stock
 	 * Price, Stock, Show 
 	 *

@@ -48,7 +48,10 @@ Route::get('/admin/stock/delete/size/{size}', 		'AdminController@getDeleteSize')
 Route::post('/admin/stock/delete/size/{size}', 		'AdminController@postDeleteSize');
 
 Route::get('/admin/customer',						'AdminController@getAllCustomer');
+Route::get('/admin/customer/add',					'AdminController@getAddCustomer');
+Route::post('/admin/customer/add',					'AdminController@postAddCustomer');
 Route::get('/admin/customer/{id}',					'AdminController@getCustomer');
+Route::post('/admin/customer/{id}',					'AdminController@postCustomer');
 
 Route::get('/admin/product/new', 					'AdminController@getProductNew');
 Route::post('admin/product/save', 					'AdminController@postProductSave');
