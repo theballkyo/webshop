@@ -29,10 +29,10 @@
                     	<tr>
                     		<td>{{$cus->id}}</td>
                     		<td><a href="{{url('admin/customer/'.$cus->id.'')}}">{{{$cus->name}}}</a></td>
-                    		<td>{{{$cus->address}}}</td>
+                    		<td>{{nl2br($cus->address)}}</td>
                     		<td>{{{$cus->email}}}</td>
                     		<td>{{{$cus->tel}}}</td>
-                    		<td>{{{$cus->note}}}</td>
+                    		<td>{{nl2br($cus->note)}}</td>
                     		<td>{{ $cus->ac_id > 0 ? '<a href="'. url('admin/customer/'.$cus->ac_id.'').'">#'. $cus->ac_id .'</a>' : 'None'}}</td>
                     	</tr>
                     @endforeach

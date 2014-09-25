@@ -202,10 +202,10 @@ class AdminController extends BaseController{
 
 		$customer = New CustomerProfile;
 		$customer->name = Input::get('name');
-		$customer->address = nl2br(Input::get('address'));
+		$customer->address = Input::get('address');
 		$customer->email = Input::get('email');
 		$customer->tel = Input::get('tel');
-		$customer->note = nl2br(Input::get('note'));
+		$customer->note = Input::get('note');
 		$customer->save();
 		Session::flash('success', '');
 		return View::make('admins.customer.add');
@@ -232,10 +232,10 @@ class AdminController extends BaseController{
 
 		$customer = CustomerProfile::find($id);
 		$customer->name = Input::get('name');
-		$customer->address = nl2br(Input::get('address'));
+		$customer->address = Input::get('address');
 		$customer->email = Input::get('email');
 		$customer->tel = Input::get('tel');
-		$customer->note = nl2br(Input::get('note'));
+		$customer->note = Input::get('note');
 		$customer->save();
 		Session::flash('success', '');
 		return Redirect::action('AdminController@getCustomer', array($id));
