@@ -11,7 +11,7 @@
                 </div>
                 <div class="module-body">
                 	<h2>Customer</h2>
-                    <a class="btn btn-info" href="{{url('admin/customer/add')}}">เพิ่มข้อมูลลูกค้าใหม่</a>
+                    <p><a class="btn btn-info" href="{{url('admin/customer/add')}}">เพิ่มข้อมูลลูกค้าใหม่</a></p>
                     <table class="table table-striped table-bordered table-condensed">
                     <thead>
                         <tr>

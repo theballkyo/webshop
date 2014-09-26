@@ -3,7 +3,6 @@
 class AdminController extends BaseController{
 
 	private $pid = 0;
-	private $stock;
 
 	public function __construct()
     {
@@ -97,28 +96,25 @@ class AdminController extends BaseController{
 		# Get stock
 		$i = 0;
 		foreach ($product['size'] as $size) {
-			$code = implode(',', array($pid, $color, $product['size'][$i]['id']));
+			$code = $this->generateCode($pid, array($color, $product['size'][$i]['id']));
+			#$code = implode(',', array($pid, $color, $product['size'][$i]['id']));
 			#print $code;
-			$stock = ProductsStock::where('code', '=', $code)->first();
-			if(empty($stock))
-			{
-				$stock = New ProductsStock;
-				$stock->code = $code;
-				$stock->stock = 0;
-				$stock->show = 0;
-				$stock->price = 0;
-				$stock->pid = $pid;
-				$stock->save();
-			}
-			$product['size'][$i]['stock'] = $stock->stock;
-			$product['size'][$i]['price'] = $stock->price;
-			$product['size'][$i]['show']  = $stock->show;
+			# Load stock in database
+			$this->loadStock($code);
+
+			if(empty($this->stock))
+				return Redirect::action('AdminController@getStocks')->withErrors('code_err', '');
+
+			$product['size'][$i]['stock'] = $this->stock->stock;
+			$product['size'][$i]['price'] = $this->stock->price;
+			$product['size'][$i]['show']  = $this->stock->show;
+			$product['size'][$i]['code']  = $code;
 			$i++;
 		}
 
 		$product['color'] = $color;
 		#print '<pre>';
-		print_r($product);
+		# print_r($product);
 
 		return View::make('admins.stock', array('product' => $product));
 	}
@@ -163,7 +159,7 @@ class AdminController extends BaseController{
 
 		for($i=0;$i<$count;$i++)
 		{
-			$cus_reserve[$i]['product'] = $this->loadProductFromCode($cus_reserve[$i]['code']);
+			$cus_reserve[$i]['product'] = $this->loadProductFromCode($cus_reserve[$i]['code_id']);
 		}
 		return View::make('admins.customer.view', array(
 											'cus_user' => $cus_user,
@@ -179,6 +175,73 @@ class AdminController extends BaseController{
 	public function getAddCustomer()
 	{
 		return View::make('admins.customer.add');
+	}
+
+	/**
+	 *	GET Reserve Product for customer
+	 *
+	 */
+	public function getReserve($code)
+	{
+		if(!$this->loadStock($code))
+			return Redirect::action('AdminController@getStocks')->withErrors('code_err', '');
+
+		$cus_users = CustomerProfile::orderBy('name', 'ASC')->get()->toArray();
+		return View::make('admins.reserve', array('cus_users' => $cus_users));
+	}
+
+	/**
+	 * POST Add detail Reserve product for customer to DB
+	 *
+	 */
+	public function postReserve($code)
+	{
+		Input::flash();
+		$rules = array('amount' => 'required');
+		if(empty(Input::get('old_cus')))
+		{
+			$rules = array_add($rules, 'name', 'required');
+		}
+		$validator = Validator::make(Input::all(), $rules);
+		if($validator->fails())
+		{
+			return Redirect::action('AdminController@getReserve', array($code))->withErrors($validator->messages());
+		}
+		$cus_id = Input::get('old_cus');
+		if(empty(Input::get('old_cus')))
+		{
+			$customer = New CustomerProfile;
+			$customer->name = Input::get('name');
+			$customer->address = Input::get('address');
+			$customer->email = Input::get('email');
+			$customer->tel = Input::get('tel');
+			$customer->note = Input::get('note');
+			$customer->save();
+			$cus_id = $customer->id;
+		}
+
+		if(!$this->loadStock($code))
+			return Redirect::action('AdminController@getReserve', array($code))->withErrors(array('code_err'));
+
+		#$stock = ProductsStock::where('code', '=', $code)->first()->id;
+		$new_stock = (int) abs(Input::get('amount'));
+		if($this->stock->stock < $new_stock)
+		{
+			Session::flash('stock', '');
+			return Redirect::action('AdminController@getReserve', array($code));
+		}
+		$this->stock->stock -= $new_stock;
+		$this->stock->save();
+
+		$reserve = new ProductsReserve;
+		$reserve->cus_id = $cus_id;
+		$reserve->stock_id = $this->stock->id;
+		$reserve->code_id = $code;
+		$reserve->amount = (int) Input::get('amount');
+		$reserve->save();
+
+		Session::flash('success', '');
+		return Redirect::action('AdminController@getReserve', array($code));
 	}
 
 	/**
@@ -248,32 +311,35 @@ class AdminController extends BaseController{
 	 */
 	public function postStock($pid, $color)
 	{
-		$code = implode(',', array($pid, $color, Input::get('size_id')));
+		#$code = implode(',', array($pid, $color, Input::get('size_id')));
+		$code = $this->generateCode($pid, array($color, Input::get('size_id')));
 		# Load stock in database
-		$this->loadStockInDB($pid, $code);
+		$this->loadStock($code);
 
+		if(empty($this->stock))
+			return Redirect::action('AdminController@getStocks')->withErrors('code_err', '');
 
 		if(Input::has('price')){
-			$price = (int) abs(Input::get('price'));
-			$res = $this->updatePrice($price);
+			$this->stock->price = (int) abs(Input::get('price'));
+			#$res = $this->updatePrice($price);
 		}
 		if(Input::has('add')){
-			$num = (int) abs(Input::get('add'));
-			$res = $this->updateStock($num, 'plus');
+			$this->stock->stock += (int) abs(Input::get('add'));
+			#$res = $this->updateStock($num, 'plus');
 		}
 		elseif(Input::has('del')){
-			$num = (int) -abs(Input::get('del'));
-			$res = $this->updateStock($num, 'plus');
+			$this->stock->stock += (int) -abs(Input::get('del'));
+			#$res = $this->updateStock($num, 'plus');
 		}
 		elseif(Input::has('update')){
-			$num = (int) Input::get('update');
-			$res = $this->updateStock($num, 'set');
+			$this->stock->stock = (int) Input::get('update');
+			#$res = $this->updateStock($num, 'set');
 		}
 		elseif(Input::has('show')){
 			$this->stock->show = Input::get('show');
-			$this->stock->save();
+			#$this->stock->save();
 		}
-
+		$this->stock->save();
 		return Redirect::action('AdminController@getStock', array('pid' => $pid, 'color' => $color));
 	}
 
@@ -401,49 +467,10 @@ class AdminController extends BaseController{
 		return Redirect::action('AdminController@getStocks');
 	}
 
-	private function updateStock($num, $type='set')
-	{
-		if($type == 'set')
-		{
-			$this->stock->stock = $num;
-		}elseif($type == 'plus')
-		{
-			$this->stock->stock += $num;			
-		}
-		$this->stock->save();
-		return True;
-	}
-
 	private function updatePrice($price)
 	{
 		$this->stock->price = $price;
 		$this->stock->save();
 		return True;
-	}
-	/**
-	 * Load stock in DB
-	 * if stock not in DB, this function will create defualt stock
-	 * Assign var $this->stock = Stock model
-	 * Return Stock Model
-	 */
-	private function loadStockInDB($pid, $code)
-	{
-		if(!empty($this->stock))
-			return $this->stock;
-		if(Products::find($pid)->count() < 1)
-			return False;
-		$this->stock = ProductsStock::where('code', '=', $code)->first();
-		#If empty, create new
-		if(empty($this->stock))
-		{
-			$this->stock = New ProductsStock;
-			$this->stock->stock = 0;
-			$this->stock->code = $code;
-			$this->stock->price = 0;
-			$this->stock->show = 0;
-			$this->stock->pid = $pid;
-			$this->stock->save();
-		}
-		return $this->stock;
 	}
 }

@@ -29,32 +29,35 @@ Route::get('/user/logout', 'UserController@getLogout');
  * Route for Admin Panel
  *
  */
-Route::get('/admin/', 								'AdminController@Index');
-Route::get('/admin/stocks', 						'AdminController@getStocks');
-Route::get('/admin/stock/get/{pid}/{color}', 		'AdminController@getStock');
-Route::post('/admin/stock/get/{pid}/{color}', 		'AdminController@postStock');
+Route::get('/admin/', 'AdminController@Index');
+Route::get('/admin/stocks', 'AdminController@getStocks');
+Route::get('/admin/stock/get/{pid}/{color}', 'AdminController@getStock');
+Route::post('/admin/stock/get/{pid}/{color}', 'AdminController@postStock');
 
-Route::get('/admin/products', 						'AdminController@getProducts');
-Route::get('/admin/product/add/color/{pid}', 		'AdminController@getAddColor');
-Route::post('/admin/product/add/color/{pid}', 		'AdminController@postAddColor');
+Route::get('/admin/products', 'AdminController@getProducts');
+Route::get('/admin/product/add/color/{pid}', 'AdminController@getAddColor');
+Route::post('/admin/product/add/color/{pid}', 'AdminController@postAddColor');
 
-Route::get('/admin/product/add/size/{pid}', 		'AdminController@getAddSize');
-Route::post('/admin/product/add/size/{pid}', 		'AdminController@postAddSize');
+Route::get('/admin/product/add/size/{pid}', 'AdminController@getAddSize');
+Route::post('/admin/product/add/size/{pid}', 'AdminController@postAddSize');
 
-Route::get('/admin/stock/delete/color/{color}', 	'AdminController@getDeleteColor');
-Route::post('/admin/stock/delete/color/{color}', 	'AdminController@postDeleteColor');
+Route::get('/admin/stock/delete/color/{color}', 'AdminController@getDeleteColor');
+Route::post('/admin/stock/delete/color/{color}', 'AdminController@postDeleteColor');
 
-Route::get('/admin/stock/delete/size/{size}', 		'AdminController@getDeleteSize');
-Route::post('/admin/stock/delete/size/{size}', 		'AdminController@postDeleteSize');
+Route::get('/admin/stock/delete/size/{size}', 'AdminController@getDeleteSize');
+Route::post('/admin/stock/delete/size/{size}', 'AdminController@postDeleteSize');
 
-Route::get('/admin/customer',						'AdminController@getAllCustomer');
-Route::get('/admin/customer/add',					'AdminController@getAddCustomer');
-Route::post('/admin/customer/add',					'AdminController@postAddCustomer');
-Route::get('/admin/customer/{id}',					'AdminController@getCustomer');
-Route::post('/admin/customer/{id}',					'AdminController@postCustomer');
+Route::get('/admin/stock/reserve/{code}', 'AdminController@getReserve');
+Route::post('/admin/stock/reserve/{code}', 'AdminController@postReserve');
 
-Route::get('/admin/product/new', 					'AdminController@getProductNew');
-Route::post('admin/product/save', 					'AdminController@postProductSave');
+Route::get('/admin/customer', 'AdminController@getAllCustomer');
+Route::get('/admin/customer/add', 'AdminController@getAddCustomer');
+Route::post('/admin/customer/add', 'AdminController@postAddCustomer');
+Route::get('/admin/customer/{id}', 'AdminController@getCustomer');
+Route::post('/admin/customer/{id}', 'AdminController@postCustomer');
+
+Route::get('/admin/product/new', 'AdminController@getProductNew');
+Route::post('admin/product/save', 'AdminController@postProductSave');
 
 /**
  * Route for Products

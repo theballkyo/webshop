@@ -27,6 +27,7 @@
                             <th class="text-center">Price</th>
                             <th colspan="3" class="text-center">Edit</th>
                             <th style="width:10%" class="text-center">Show</th>
+                            <th class="text-center">Reserve</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +37,7 @@
                                 <td>{{$size['stock']}}</td>
 
                                 <form method="post" class="form-horizontal row-fluid">
-                                <td><input name="price" type="text" value="{{$size['price']}}" class="span1">
+                                <td><input autocomplete="off" name="price" type="text" value="{{$size['price']}}" class="span1">
                                     <button type="submit" class="btn btn-primary">แก้ไข</button>
                                 </td>
                                 {{ Form::token() }}
@@ -44,7 +45,7 @@
                                 </form>
 
                                 <form method="post" class="form-horizontal row-fluid">
-                                <td><input name="add" type="text" value="0" class="span1">
+                                <td><input autocomplete="off" name="add" type="text" value="0" class="span1">
                                     <button type="submit" class="btn btn-primary">เพิ่ม</button>
                                 </td>
                                 {{ Form::token() }}
@@ -52,7 +53,7 @@
                                 </form>
 
                                 <form method="post" class="form-horizontal row-fluid">
-                                <td><input name="del" type="text" value="0" class="span1">
+                                <td><input autocomplete="off" name="del" type="text" value="0" class="span1">
                                     <button type="submit" class="btn btn-primary">ลด</button>
                                 </td>
                                 {{ Form::token() }}
@@ -60,7 +61,7 @@
                                 </form>
 
                                 <form method="post" class="form-horizontal row-fluid">
-                                <td><input name="update" type="text" value="{{$size['stock']}}" class="span1">
+                                <td><input autocomplete="off" name="update" type="text" value="{{$size['stock']}}" class="span1">
                                     <button type="submit" class="btn btn-primary">แก้ไข</button>
                                 </td>
                                 {{ Form::token() }}
@@ -72,12 +73,15 @@
                                     <label class="checkbox inline">
                                     <input type="hidden" name="show" value="0" />
                                     <input name="show" type="checkbox" value="1" onChange="this.form.submit()"
-                                    {{ $size['show'] == '1' ? 'checked' : ''}}>
+                                    {{ $size['show'] == '1' ? 'checked' : ''}} />
                                         Show ?
                                     </label>
                                     <input type="hidden" name="size_id" value="{{$size['id']}}">
                                     {{ Form::token() }}
                                     </form>
+                                </td>
+                                <td>
+                                    <a class="btn" href="{{url('admin/stock/reserve/'.$size['code'].'')}}">จองสินค้านี้</a>
                                 </td>
                             </tr>
                         @endforeach
