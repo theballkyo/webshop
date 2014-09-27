@@ -10,7 +10,7 @@ class UserController extends BaseController{
 		}
 		else
 		{
-			return View::make('user/getLogin');
+			return View::make('user.getLogin');
 		}
 	}	
 
@@ -22,10 +22,12 @@ class UserController extends BaseController{
 		}
 		$username = Input::get('username');
 		$password = Input::get('password');
-		if(Auth::attempt(array('username' => $username, 'password' => $password)))
+
+		if(Auth::attempt(array('username' => $username, 'password' => $password), true))
 		{
 			if(Auth::user()->status == -1)
 			{
+				Auth::logout();
 				return View::make('user.getLogin', array('error_msg' => 'This user can\'t login.'));
 			}
 			return Redirect::to('user/login');
@@ -58,7 +60,7 @@ class UserController extends BaseController{
 
 		if(Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password'))))
 		{
-			return Redirect::to('user.login');
+			return Redirect::to('user/login');
 		}
 	}
 

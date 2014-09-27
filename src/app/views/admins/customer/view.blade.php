@@ -29,6 +29,7 @@
                             <th style="width:20%" class="text-center">Color</th>
                             <th class="text-center">Size</th>
                             <th class="text-center">Amount</th>
+                            <th class="text-center">Cancel</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,7 @@
                             <td>{{$detail['data']['text']}}</td>
                             @endforeach
                             <td>{{$reserve['amount']}}</td>
+                            <td><a href="{{url('admin/stock/reserve/cancel/'.$reserve['id'].'')}}">Cancel</a></td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -137,10 +137,10 @@ class BaseController extends Controller {
 	}
 
 	/**
-	 *
+	 * Get all details of product
+	 * Old function ! don't use it!!!
 	 *
 	 */
-
 	protected function allDetailsProduct()
 	{
 	 	$products['detail'] = ProductsDetailFields::with(array('datas' => function($query) use ($pid)
@@ -159,4 +159,16 @@ class BaseController extends Controller {
 					->get()
 					->toArray();
 	}
+
+	/**
+	 * Random string
+	 * @prame Int length
+	 * @return String
+	 *
+	 */
+	protected function generateRandomString($length = 10)
+	{
+    	return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+	}
+
 }

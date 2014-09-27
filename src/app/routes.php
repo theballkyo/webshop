@@ -50,6 +50,8 @@ Route::post('/admin/stock/delete/size/{size}', 'AdminController@postDeleteSize')
 Route::get('/admin/stock/reserve/{code}', 'AdminController@getReserve');
 Route::post('/admin/stock/reserve/{code}', 'AdminController@postReserve');
 
+Route::any('admin/stock/reserve/cancel/{code}', 'AdminController@cancelReserve');
+
 Route::get('/admin/customer', 'AdminController@getAllCustomer');
 Route::get('/admin/customer/add', 'AdminController@getAddCustomer');
 Route::post('/admin/customer/add', 'AdminController@postAddCustomer');

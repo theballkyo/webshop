@@ -9,6 +9,6 @@ class HomeController extends BaseController {
 
 	public function getShop()
 	{
-
+		print Cookie::get('remeber');
 	}
 }
