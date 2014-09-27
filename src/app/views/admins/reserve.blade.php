@@ -87,7 +87,7 @@
 						</div>
 						<div class="control-group">
 							<div class="controls">
-								<button type="submit" class="btn btn-info btn-large">Add customer</button>
+								<button type="submit" class="btn btn-info btn-large">Reserve</button>
 							</div>
 						</div>
 						{{Form::token()}}

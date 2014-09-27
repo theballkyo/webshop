@@ -16,6 +16,11 @@
                         <strong>Message :: </strong>
                         ทำการอัพเดทข้อมูลเรียบร้อยแล้ว
                     </div>
+                    @if(Session::has('cancel_succ'))
+                    <div class="alert alert-success">
+                        <strong>Message :: </strong>
+                        ยกเลิกรายการจองเรียบร้อยแล้ว
+                    </div>
                     @elseif($errors->has('name'))
                     <div class="alert alert-error">
                         <strong>Message :: </strong>
@@ -25,11 +30,15 @@
                     <table class="table table-striped table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <th style="width:1" class="text-center">Product name</th>
-                            <th style="width:20%" class="text-center">Color</th>
-                            <th class="text-center">Size</th>
-                            <th class="text-center">Amount</th>
+                            <th style="width:20%" class="text-center">Product name</th>
+                            <th style="width:5%" class="text-center">Color</th>
+                            <th style="width:5%" class="text-center">Size</th>
+                            <th style="width:5%" class="text-center">Amount</th>
+                            <th>Price</th>
+                            <th>Discount price</th>
+                            <th>Discount</th>
                             <th class="text-center">Cancel</th>
+                            <th style="width:15%"class="text-center">Payment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,11 +49,49 @@
                             <td>{{$detail['data']['text']}}</td>
                             @endforeach
                             <td>{{$reserve['amount']}}</td>
-                            <td><a href="{{url('admin/stock/reserve/cancel/'.$reserve['id'].'')}}">Cancel</a></td>
+                            <td>{{$reserve['price']}}</td>
+                            <td>
+                            @if($reserve['discount_type'] == 0)
+                                {{$reserve['price']}}
+                            @elseif($reserve['discount_type'] == 1)
+                                {{$reserve['price'] - $reserve['discount']}}
+                            @elseif($reserve['discount_type'] == 2)
+                                {{ ceil(($reserve['price'] ) * ((100 - $reserve['discount']) / 100)) }}
+                            @elseif($reserve['discount_type'] == 3)
+                                {{$reserve['discount']}}
+                            @elseif($reserve['discount_type'] == 4)
+                            @endif
+                            </td>
+                            <td>
+                            @if($reserve['discount_type'] == 0)
+                                0 บาท
+                            @elseif($reserve['discount_type'] == 1)
+                                ลดไป {{ $reserve['discount'] }} บาท
+                            @elseif($reserve['discount_type'] == 2)
+                                {{ $reserve['discount'] }} %
+                            @elseif($reserve['discount_type'] == 3)
+                                ลดเหลือ {{$reserve['discount']}} บาท
+                            @elseif($reserve['discount_type'] == 4)
+                            @endif
+                            </td>
+                            <td class="text-center">{{$reserve['payment'] == 0 ? '<a class="btn" href="'.url('admin/stock/reserve/cancel/'.$reserve['id'].'').'">Cancel</a>' : ''}}</td>
+                            <th class="text-center">
+                            <form method="post" class="form-horizontal row-fluid">
+                            <label class="checkbox inline">
+                            <input type="hidden" name="payment" value="0" />
+                            <input name="payment" type="checkbox" value="1" onChange="this.form.submit()"
+                                {{ $reserve['payment'] == '1' ? 'checked' : ''}} />
+                            ชำระเงินเรียบร้อย
+                            </label>
+                            <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
+                            {{Form::token()}}
+                            </form>
+                            </th>
                         </tr>
                     @endforeach
                     </tbody>
                     </table>
+                    <p>* ช่อง Payment ถ้าติ๊กถูกคือชำระเงินเรียบร้อยแล้ว</p>
                     <h2>Customer profile</h2>
                     <form class="form-horizontal row-fluid" method="post" 
                                 onsubmit="return confirm('คุณต้องการแก้ไขข้อมูลนี้หรือไม่ ?');">

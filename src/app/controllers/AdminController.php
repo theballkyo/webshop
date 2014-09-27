@@ -151,7 +151,8 @@ class AdminController extends BaseController{
 		$cus_reserve = ProductsReserve::join('products_stock', 'products_stock.id',
 												'=', 'products_reserve.stock_id')
 										->where('cus_id', '=', $id)
-										->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount')
+										->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount',
+												'products_stock.price', 'products_reserve.discount', 'products_reserve.discount_type', 'products_reserve.payment')
 										->get();
 
 		$count = $cus_reserve->count();
@@ -321,6 +322,19 @@ class AdminController extends BaseController{
 	 */
 	public function postCustomer($id)
 	{
+		if(Input::has('payment'))
+		{
+			$reserve = ProductsReserve::find(Input::get('reserve_id'));
+			if(empty($reserve))
+			{
+				Session::flash('reserve_id', '');
+				return Redirect::back();
+			}
+			$reserve->payment = Input::get('payment') ? '1' : '0';
+			$reserve->save();
+			Session::flash('success', '');
+			return Redirect::back();
+		}
 		$validator = Validator::make(
 						Input::all(),
 						array(
@@ -342,7 +356,7 @@ class AdminController extends BaseController{
 		$customer->note = Input::get('note');
 		$customer->save();
 		Session::flash('success', '');
-		return Redirect::action('AdminController@getCustomer', array($id));
+		return Redirect::back();
 	}
 
 	/**
@@ -506,12 +520,5 @@ class AdminController extends BaseController{
 			$detail->delete();
 		}
 		return Redirect::action('AdminController@getStocks');
-	}
-
-	private function updatePrice($price)
-	{
-		$this->stock->price = $price;
-		$this->stock->save();
-		return True;
 	}
 }
