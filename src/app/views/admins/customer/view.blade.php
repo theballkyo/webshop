@@ -16,7 +16,7 @@
                         <strong>Message :: </strong>
                         ทำการอัพเดทข้อมูลเรียบร้อยแล้ว
                     </div>
-                    @if(Session::has('cancel_succ'))
+                    @elseif(Session::has('cancel_succ'))
                     <div class="alert alert-success">
                         <strong>Message :: </strong>
                         ยกเลิกรายการจองเรียบร้อยแล้ว
@@ -34,11 +34,12 @@
                             <th style="width:5%" class="text-center">Color</th>
                             <th style="width:5%" class="text-center">Size</th>
                             <th style="width:5%" class="text-center">Amount</th>
-                            <th>Price</th>
+                            <th style="width:5%">Price</th>
                             <th>Discount price</th>
-                            <th>Discount</th>
+                            <th>Discount Type</th>
                             <th class="text-center">Cancel</th>
                             <th style="width:15%"class="text-center">Payment</th>
+                            <th>Reserve Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,6 +88,7 @@
                             {{Form::token()}}
                             </form>
                             </th>
+                            <th>{{$reserve['created_at']}}</th>
                         </tr>
                     @endforeach
                     </tbody>
