@@ -6,9 +6,8 @@
             <li class="active"><a href="{{ url('/admin/customer') }}"><i class="menu-icon icon-dashboard"></i>Customer
             </a></li>
             <li><a href="{{url('/admin/stocks')}}"><i class="menu-icon icon-inbox"></i>Stocks<b class="label green pull-right">
-            11</b> </a></li>
-            <li><a href="{{url('/user/logout')}}"><i class="menu-icon icon-tasks"></i>Logout<b class="label orange pull-right">
-            19</b> </a></li>
+            -</b> </a></li>
+            <li><a href="{{url('/user/logout')}}"><i class="menu-icon icon-tasks"></i>Logout</a></li>
         </ul>
         <!--/.widget-nav-->
     </div>

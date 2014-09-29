@@ -119,6 +119,11 @@ class AdminController extends BaseController{
 		return View::make('admins.stock', array('product' => $product));
 	}
 
+	/**
+	 * GET Add color page
+	 * Render add color to product page
+	 *
+	 */
 	public function getAddColor($pid)
 	{
 		$product = Products::find($pid)->toArray();
@@ -126,6 +131,11 @@ class AdminController extends BaseController{
 		return View::make('admins.add.color', array('product' => $product));
 	}
 
+	/**
+	 * GET Add size page
+	 * Render add size to product page
+	 *
+	 */
 	public function getAddSize($pid)
 	{
 		return View::make('admins.add.size');
@@ -152,7 +162,8 @@ class AdminController extends BaseController{
 												'=', 'products_reserve.stock_id')
 										->where('cus_id', '=', $id)
 										->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount',
-												'products_stock.price', 'products_reserve.discount', 'products_reserve.discount_type', 'products_reserve.payment')
+												'products_stock.price', 'products_reserve.discount', 'products_reserve.discount_type', 'products_reserve.payment',
+												'products_reserve.created_at')
 										->get();
 
 		$count = $cus_reserve->count();
@@ -397,7 +408,11 @@ class AdminController extends BaseController{
 		$this->stock->save();
 		return Redirect::action('AdminController@getStock', array('pid' => $pid, 'color' => $color));
 	}
-
+	/**
+	 * POST Add new color to product
+	 * @return void
+	 *
+	 */
 	public function postAddColor($pid)
 	{
 		Session::flash('msg', '');
@@ -445,6 +460,11 @@ class AdminController extends BaseController{
 		return View::make('admins.add.color', array('errors' => $validator->messages()));
 	}
 
+	/**
+	 * POST Add new size to product
+	 * @return void
+	 *
+	 */
 	public function postAddSize($pid)
 	{
 		Session::flash('msg', '');

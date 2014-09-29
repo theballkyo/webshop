@@ -10,7 +10,11 @@
                 Welcome ,{{ Auth::user()->username }}</h3>
                 </div>
                 <div class="module-body">
-                    
+                    <div class="alert warning">
+                        <strong>Warning :: </strong>
+                        ขณะนี้กำลังอยู่ช่วงทดสอบระบบอยู่อาจมีปัญหาบางอย่าง !
+                    </div>
+                    <h3>ยินดีต้อนรับสู่ Sommai Stock Manager</h3>
                 </div>
             </div>
         </div>
