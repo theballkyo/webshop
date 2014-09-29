@@ -29,7 +29,7 @@
                         </form>
                         <ul class="nav pull-right">
                             <li>
-                                <a href="#"><div id="clockbox"></div></a>
+                                <a href="#"></a>
                             </li>
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{{asset('images/user.png')}}" class="nav-avatar" />
@@ -100,7 +100,7 @@
             if(nsec <= 9) {nsec = "0" +nsec;}
 
 
-            document.getElementById('clockbox').innerHTML="Time :: "+(nmonth+1)+"/"+ndate+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
+            document.getElementById('clockbox').innerHTML="ขณะนี้เวลา :: "+(nmonth+1)+"/"+ndate+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
             setTimeout(function(){GetClock()}, 1000); 
 
             }

@@ -1,9 +1,11 @@
 <div class="span3">
     <div class="sidebar">
         <ul class="widget widget-menu unstyled">
-            <li class="active"><a href="{{ url('/admin') }}"><i class="menu-icon icon-dashboard"></i>Dashboard
+            <li class="clock"><a href="#"><div id="clockbox"></div>
             </a></li>
-            <li class="active"><a href="{{ url('/admin/customer') }}"><i class="menu-icon icon-dashboard"></i>Customer
+            <li><a href="{{ url('/admin') }}"><i class="menu-icon icon-dashboard"></i>Dashboard
+            </a></li>
+            <li><a href="{{ url('/admin/customer') }}"><i class="menu-icon icon-dashboard"></i>Customer
             </a></li>
             <li><a href="{{url('/admin/stocks')}}"><i class="menu-icon icon-inbox"></i>Stocks<b class="label green pull-right">
             -</b> </a></li>

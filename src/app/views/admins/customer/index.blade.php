@@ -21,7 +21,8 @@
                             <th class="text-center">Email</th>
                             <th style="width:10%" class="text-center">Tel.</th>
                             <th class="text-center">Note</th>
-                            <th style="width:5%" class="text-center">From A/C</th>
+                            <th class="text-center">From A/C</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,10 +35,18 @@
                     		<td>{{{$cus->tel}}}</td>
                     		<td>{{nl2br($cus->note)}}</td>
                     		<td>{{ $cus->ac_id > 0 ? '<a href="'. url('admin/customer/'.$cus->ac_id.'').'">#'. $cus->ac_id .'</a>' : 'None'}}</td>
+                            <td>
+                            <form method="get" action=""
+                                    onsubmit="return confirm('คุณต้องการลบข้อมูลลูกค้าคนนี้หรือไม่ ?');">
+                                <button class="btn btn-inverse">Delete</button>
+                                {{Form::token()}}
+                            </form>
+                            </td>
                     	</tr>
                     @endforeach
                 	</tbody>
                 	</table>
+                    *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ
                 </div>
             </div>
         </div>
