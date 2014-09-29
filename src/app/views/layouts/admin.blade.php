@@ -100,7 +100,7 @@
             if(nsec <= 9) {nsec = "0" +nsec;}
 
 
-            document.getElementById('clockbox').innerHTML="ขณะนี้เวลา :: "+(nmonth+1)+"/"+ndate+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
+            document.getElementById('clockbox').innerHTML="ขณะนี้เวลา :: "+ndate+"/"+(nmonth+1)+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
             setTimeout(function(){GetClock()}, 1000); 
 
             }

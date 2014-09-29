@@ -1,6 +1,5 @@
 @extends('layouts.ubase')
 @section('content')
-{{ Session::get('error') }}
 <div class="row">
     <div class="col-lg-12 text-center" id="col1">
       <h1>Hello, {{ Auth::check() ? Auth::user()->username : 'Guest' }}</h1>

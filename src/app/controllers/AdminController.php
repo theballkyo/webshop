@@ -342,7 +342,7 @@ class AdminController extends BaseController{
 				return Redirect::back();
 			}
 			$reserve->payment = Input::get('payment') ? '1' : '0';
-			$reserve->save();
+			$reserve->update();
 			Session::flash('success', '');
 			return Redirect::back();
 		}

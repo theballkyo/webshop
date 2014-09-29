@@ -76,7 +76,7 @@
                             @endif
                             </td>
                             <td class="text-center">{{$reserve['payment'] == 0 ? '<a class="btn" href="'.url('admin/stock/reserve/cancel/'.$reserve['id'].'').'">Cancel</a>' : ''}}</td>
-                            <th class="text-center">
+                            <td class="text-center">
                             <form method="post" class="form-horizontal row-fluid">
                             <label class="checkbox inline">
                             <input type="hidden" name="payment" value="0" />
@@ -87,8 +87,8 @@
                             <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
                             {{Form::token()}}
                             </form>
-                            </th>
-                            <th>{{$reserve['created_at']}}</th>
+                            </td>
+                            <td>{{date('d/m/Y h:i:s A', strtotime($reserve['created_at']))}}</td>
                         </tr>
                     @endforeach
                     </tbody>
