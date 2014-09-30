@@ -215,6 +215,8 @@ class AdminController extends BaseController{
 											  ->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount', 
 											  		 	'products_reserve.discount', 'products_reserve.discount_type', 'products_stock.price')
 											  ->first();
+		# Fixed id reserve
+		$reserve->id = $id;
 
 		if(empty($reserve))
 		{	
