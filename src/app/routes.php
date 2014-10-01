@@ -47,8 +47,10 @@ Route::post('/admin/stock/delete/color/{color}', 'AdminController@postDeleteColo
 Route::get('/admin/stock/delete/size/{size}', 'AdminController@getDeleteSize');
 Route::post('/admin/stock/delete/size/{size}', 'AdminController@postDeleteSize');
 
-Route::get('/admin/stock/reserve/{code}', 'AdminController@getReserve');
-Route::post('/admin/stock/reserve/{code}', 'AdminController@postReserve');
+Route::get('admin/reserve', 'AdminController@getReserve');
+
+Route::get('/admin/stock/reserve/{code}', 'AdminController@getStockReserve');
+Route::post('/admin/stock/reserve/{code}', 'AdminController@postStockReserve');
 
 Route::any('admin/stock/reserve/cancel/{code}', 'AdminController@cancelReserve');
 
@@ -67,3 +69,4 @@ Route::post('admin/product/save', 'AdminController@postProductSave');
  */
 Route::get('/product/{pid}', 'ProductController@getProduct');
 Route::get('/test', 'TestController@Index');
+Route::get('/test2', 'TestController@test2');

@@ -191,10 +191,57 @@ class AdminController extends BaseController{
 	}
 
 	/**
+	 * GET Show reserve for all product
+	 *
+	 */
+	public function getReserve()
+	{
+		# Reserve
+		$r_wait = ProductsReserve::where('type', '=', 0)->get();
+		$r_succ = ProductsReserve::where('type', '=', 1)->get();
+		$r_cancel = ProductsReserve::where('type', '=', 2)->get();
+
+		$i=0;
+		$count = $r_wait->count();
+		$r_wait->toArray();
+		for($i=0;$i<$count;$i++)
+		{
+			$r_wait[$i]['product'] = $this->loadProductFromCode($r_wait[$i]['code_id']);
+			$r_wait[$i]['price'] = $this->getPrice($r_wait[$i]['code_id']);
+		}
+
+		$i=0;
+		$count = $r_succ->count();
+		$r_succ->toArray();
+		for($i=0;$i<$count;$i++)
+		{
+			$r_succ[$i]['product'] = $this->loadProductFromCode($r_succ[$i]['code_id']);
+			$r_succ[$i]['price'] = $this->getPrice($r_succ[$i]['code_id']);
+		}
+
+		$i=0;
+		$count = $r_cancel->count();
+		$r_cancel->toArray();
+		for($i=0;$i<$count;$i++)
+		{
+			$r_cancel[$i]['product'] = $this->loadProductFromCode($r_cancel[$i]['code_id']);
+			$r_cancel[$i]['price'] = $this->getPrice($r_cancel[$i]['code_id']);
+		}
+
+		return View::make('admins.reserve.index',
+						array(
+							'r_wait'   => $r_wait,
+							'r_succ'   => $r_succ,
+							'r_cancel' => $r_cancel
+							));
+
+	}
+
+	/**
 	 *	GET Reserve Product for customer
 	 *
 	 */
-	public function getReserve($code)
+	public function getStockReserve($code)
 	{
 		if(!$this->loadStock($code))
 			return Redirect::action('AdminController@getStocks')->withErrors('code_err', '');
@@ -249,7 +296,7 @@ class AdminController extends BaseController{
 	 * POST Add detail Reserve product for customer to DB
 	 *
 	 */
-	public function postReserve($code)
+	public function postStockReserve($code)
 	{
 		Input::flash();
 		$rules = array('amount' => 'required');
@@ -348,6 +395,7 @@ class AdminController extends BaseController{
 			Session::flash('success', '');
 			return Redirect::back();
 		}
+
 		$validator = Validator::make(
 						Input::all(),
 						array(

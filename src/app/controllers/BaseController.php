@@ -3,6 +3,7 @@
 class BaseController extends Controller {
 
 	protected $stock;
+	protected $cache_pd = [];
 	/**
 	 * Setup the layout used by the controller.
 	 *
@@ -70,9 +71,22 @@ class BaseController extends Controller {
 		return $detail;
 	}
 
+	/**
+	 * Get stock product
+	 *
+	 */
 	protected function stockProduct($code)
 	{
 	 	return ProductsStock::where('code', '=', $code)->select('stock')->first()->stock;
+	}
+
+	/**
+	 * Get price product
+	 *
+	 */
+	protected function getPrice($code)
+	{
+		return ProductsStock::where('code', '=', $code)->select('price')->first()->price;
 	}
 
 	/**

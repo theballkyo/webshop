@@ -37,7 +37,7 @@
                             <th style="width:5%">Price</th>
                             <th>Discount price</th>
                             <th>Discount Type</th>
-                            <th class="text-center">Cancel</th>
+                            <th class="text-center">Do</th>
                             <th style="width:15%"class="text-center">Payment</th>
                             <th>Reserve Time</th>
                         </tr>
@@ -75,7 +75,12 @@
                             @elseif($reserve['discount_type'] == 4)
                             @endif
                             </td>
-                            <td class="text-center">{{$reserve['payment'] == 0 ? '<a class="btn" href="'.url('admin/stock/reserve/cancel/'.$reserve['id'].'').'">Cancel</a>' : ''}}</td>
+                            <td class="text-center">
+                                @if($reserve['payment'] == 0)
+                                <a class="btn btn-success" href="{{url('admin/stock/reserve/discount/'.$reserve['id'])}}">Discount</a>
+                                <p><a class="btn" href="{{url('admin/stock/reserve/cancel/'.$reserve['id'])}}">Cancel</a></p>
+                                @endif
+                            </td>
                             <td class="text-center">
                             <form method="post" class="form-horizontal row-fluid">
                             <label class="checkbox inline">
