@@ -10,6 +10,12 @@
                 Welcome ,{{ Auth::user()->username }}</h3>
                 </div>
                 <div class="module-body">
+                    @if(Session::has('del_succ'))
+                    <div class="alert alert-success">
+                        <strong>Message :: </strong>
+                            ลบข้อมูลผู้ใช้เรียนร้อยแล้ว
+                    </div>
+                    @endif
                 	<h2>Customer</h2>
                     <p><a class="btn btn-info" href="{{url('admin/customer/add')}}">เพิ่มข้อมูลลูกค้าใหม่</a></p>
                     <table class="table table-striped table-bordered table-condensed">
@@ -36,17 +42,17 @@
                     		<td>{{nl2br($cus->note)}}</td>
                     		<td>{{ $cus->ac_id > 0 ? '<a href="'. url('admin/customer/'.$cus->ac_id.'').'">#'. $cus->ac_id .'</a>' : 'None'}}</td>
                             <td>
-                            <form method="get" action=""
+                            <form method="post" action="{{url('admin/customer/del')}}"
                                     onsubmit="return confirm('คุณต้องการลบข้อมูลลูกค้าคนนี้หรือไม่ ?');">
                                 <button class="btn btn-inverse">Delete</button>
                                 {{Form::token()}}
+                                <input type="hidden" name="id" value="{{$cus->id}}"></input>
                             </form>
                             </td>
                     	</tr>
                     @endforeach
                 	</tbody>
                 	</table>
-                    *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ
                 </div>
             </div>
         </div>

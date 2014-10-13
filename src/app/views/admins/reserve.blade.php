@@ -16,7 +16,7 @@
 						ทำการจองเรียบร้อยแล้ว
 					</div>
 					@endif
-					<form action="" method="post" class="form-horizontal row-fluid">
+					<form method="post" class="form-horizontal row-fluid">
 						<div class="control-group">
 							<label class="control-label" for="amount">Amount *</label>              
 							<div class="controls">

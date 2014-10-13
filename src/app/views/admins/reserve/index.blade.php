@@ -10,6 +10,12 @@
                 Welcome ,{{ Auth::user()->username }}</h3>
                 </div>
                 <div class="module-body">
+                    @if(Session::get('success'))
+                    <div class="alert alert-success">
+                        <strong>Message :: </strong>
+                            อัพเดท
+                    </div>
+                    @endif
                 	<h2>Wait for payment</h2>
                     <table class="table table-striped table-bordered table-condensed">
                     <thead>
@@ -23,7 +29,6 @@
                             <th>Discount price</th>
                             <th>Discount Type</th>
                             <th class="text-center">Do</th>
-                            <th style="width:15%"class="text-center">Payment</th>
                             <th>Reserve Time</th>
                         </tr>
                     </thead>
@@ -62,22 +67,18 @@
                             @endif
                             </td>
                             <td class="text-center">
-                                @if($reserve['payment'] == 0)
-                                <a class="btn btn-success" href="{{url('admin/stock/reserve/discount/'.$reserve['id'])}}">Discount</a>
-                                <p><a class="btn" href="{{url('admin/stock/reserve/cancel/'.$reserve['id'])}}">Cancel</a></p>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                            <form method="post" class="form-horizontal row-fluid">
-                            <label class="checkbox inline">
-                            <input type="hidden" name="payment" value="0" />
-                            <input name="payment" type="checkbox" value="1" onChange="this.form.submit()"
-                                {{ $reserve['payment'] == '1' ? 'checked' : ''}} />
-                            ชำระเงินเรียบร้อย
-                            </label>
-                            <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
-                            {{Form::token()}}
-                            </form>
+                                <form method="post" class="form-horizontal row-fluid" action="{{url('admin/reserve/payment')}}">
+                                    <label class="checkbox inline">
+                                    <input type="hidden" name="payment" value="0" />
+                                    <input name="payment" type="checkbox" value="1" onChange="this.form.submit()"
+                                        {{ $reserve['type'] == '1' ? 'checked' : ''}} />
+                                    ชำระเงินเรียบร้อย
+                                    </label>
+                                    <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
+                                    {{Form::token()}}
+                                </form>
+                                <a class="btn btn-success" href="{{url('admin/reserve/discount/'.$reserve['id'])}}">Discount</a>
+                                <p><a class="btn" href="{{url('admin/reserve/cancel/'.$reserve['id'])}}">Cancel</a></p>
                             </td>
                             <td>{{date('d/m/Y h:i:s A', strtotime($reserve['created_at']))}}</td>
                         </tr>
@@ -152,7 +153,6 @@
                             <th style="width:5%">Price</th>
                             <th>Discount price</th>
                             <th>Discount Type</th>
-                            <th style="width:15%"class="text-center">Payment</th>
                             <th>Reserve Time</th>
                         </tr>
                     </thead>
@@ -189,18 +189,6 @@
                                 ลดเหลือ {{$reserve['discount']}} บาท
                             @elseif($reserve['discount_type'] == 4)
                             @endif
-                            </td>
-                            <td class="text-center">
-                            <form method="post" class="form-horizontal row-fluid">
-                            <label class="checkbox inline">
-                            <input type="hidden" name="payment" value="0" />
-                            <input name="payment" type="checkbox" value="1" onChange="this.form.submit()"
-                                {{ $reserve['payment'] == '1' ? 'checked' : ''}} />
-                            ชำระเงินเรียบร้อย
-                            </label>
-                            <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
-                            {{Form::token()}}
-                            </form>
                             </td>
                             <td>{{date('d/m/Y h:i:s A', strtotime($reserve['created_at']))}}</td>
                         </tr>

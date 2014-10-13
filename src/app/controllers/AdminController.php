@@ -161,8 +161,9 @@ class AdminController extends BaseController{
 		$cus_reserve = ProductsReserve::join('products_stock', 'products_stock.id',
 												'=', 'products_reserve.stock_id')
 										->where('cus_id', '=', $id)
+										->whereIn('type', array(0, 1))
 										->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount',
-												'products_stock.price', 'products_reserve.discount', 'products_reserve.discount_type', 'products_reserve.payment',
+												'products_stock.price', 'products_reserve.discount', 'products_reserve.discount_type', 'products_reserve.type',
 												'products_reserve.created_at')
 										->get();
 
@@ -174,6 +175,7 @@ class AdminController extends BaseController{
 		{
 			$cus_reserve[$i]['product'] = $this->loadProductFromCode($cus_reserve[$i]['code_id']);
 		}
+
 		return View::make('admins.customer.view', array(
 											'cus_user' => $cus_user,
 											'cus_reserve' => $cus_reserve,
@@ -293,6 +295,49 @@ class AdminController extends BaseController{
 	}
 
 	/**
+	 * GET -> Discount reserve product
+	 *
+	 */
+	public function getReserveDis($id)
+	{
+		$cus_reserve = ProductsReserve::join('products_stock', 'products_stock.id',
+												'=', 'products_reserve.stock_id')
+										->where('products_reserve.id', '=', $id)
+										->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount',
+												'products_stock.price', 'products_reserve.discount', 'products_reserve.discount_type', 'products_reserve.type',
+												'products_reserve.created_at')
+										->get();
+
+		$count = $cus_reserve->count();
+		# Convert object to array because it want to select index
+		$cus_reserve = $cus_reserve->toArray();
+
+		for($i=0;$i<$count;$i++)
+		{
+			$cus_reserve[$i]['product'] = $this->loadProductFromCode($cus_reserve[$i]['code_id']);
+		}
+
+		return View::make('admins.reserve.discount', array('cus_reserve' => $cus_reserve));
+	}
+
+	/**
+	 * POST -> Discount reserve product
+	 *
+	 */
+	public function postReserveDis($id)
+	{
+		$reserve = ProductsReserve::find($id);
+		if(empty($reserve))
+			return Redirect::action('AdminController@getAllCustomer');
+
+		$reserve->discount_type = Input::get('discount_type');
+		$reserve->discount      = Input::get('discount');
+		$reserve->save();
+
+		return Redirect::back();
+	}
+
+	/**
 	 * POST Add detail Reserve product for customer to DB
 	 *
 	 */
@@ -307,7 +352,7 @@ class AdminController extends BaseController{
 		$validator = Validator::make(Input::all(), $rules);
 		if($validator->fails())
 		{
-			return Redirect::action('AdminController@getReserve', array($code))->withErrors($validator->messages());
+			return Redirect::action('AdminController@getStockReserve', array($code))->withErrors($validator->messages());
 		}
 		$cus_id = Input::get('old_cus');
 		if(empty(Input::get('old_cus')))
@@ -323,14 +368,14 @@ class AdminController extends BaseController{
 		}
 
 		if(!$this->loadStock($code))
-			return Redirect::action('AdminController@getReserve', array($code))->withErrors(array('code_err'));
+			return Redirect::action('AdminController@getStockReserve', array($code))->withErrors(array('code_err'));
 
 		#$stock = ProductsStock::where('code', '=', $code)->first()->id;
 		$new_stock = (int) abs(Input::get('amount'));
 		if($this->stock->stock < $new_stock)
 		{
 			Session::flash('stock', '');
-			return Redirect::action('AdminController@getReserve', array($code));
+			return Redirect::action('AdminController@getStockReserve', array($code));
 		}
 		$this->stock->stock -= $new_stock;
 		$this->stock->save();
@@ -343,7 +388,7 @@ class AdminController extends BaseController{
 		$reserve->save();
 
 		Session::flash('success', '');
-		return Redirect::action('AdminController@getReserve', array($code));
+		return Redirect::action('AdminController@getStockReserve', array($code));
 	}
 
 	/**
@@ -374,6 +419,25 @@ class AdminController extends BaseController{
 		$customer->save();
 		Session::flash('success', '');
 		return View::make('admins.customer.add');
+	}
+
+	/**
+	 * POST -> Delete customer data
+	 *
+	 */
+	public function postDelCustomer()
+	{
+		$id = Input::get('id');
+		if(empty($id))
+			return Redirect::back();
+
+		$cus = CustomerProfile::find($id);
+		if(!empty($cus))
+		{
+			Session::flash('del_succ', '');
+			$cus->delete();
+		}
+		return Redirect::back();
 	}
 
 	/**
@@ -421,6 +485,27 @@ class AdminController extends BaseController{
 	}
 
 	/**
+	 * POST -> Change Payment Reserve Status
+	 *
+	 */
+	public function postReservePay()
+	{
+		$reserve = ProductsReserve::find(Input::get('reserve_id'));
+
+		if(empty($reserve))
+		{
+			Session::flash('reserve_id', '');
+			return Redirect::back();
+		}
+
+		$reserve->type = Input::get('payment') ? '1' : '0';
+		$reserve->save();
+
+		Session::flash('success', '');
+		return Redirect::back();
+	}
+
+	/**
 	 * Post -> Update product stock
 	 * Price, Stock, Show 
 	 *
@@ -458,6 +543,7 @@ class AdminController extends BaseController{
 		$this->stock->save();
 		return Redirect::action('AdminController@getStock', array('pid' => $pid, 'color' => $color));
 	}
+
 	/**
 	 * POST Add new color to product
 	 * @return void

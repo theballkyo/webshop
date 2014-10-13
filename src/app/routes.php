@@ -48,15 +48,18 @@ Route::get('/admin/stock/delete/size/{size}', 'AdminController@getDeleteSize');
 Route::post('/admin/stock/delete/size/{size}', 'AdminController@postDeleteSize');
 
 Route::get('admin/reserve', 'AdminController@getReserve');
+Route::post('admin/reserve/payment', 'AdminController@postReservePay');
+Route::get('admin/reserve/discount/{id}', 'AdminController@getReserveDis');
+Route::post('admin/reserve/discount/{id}', 'AdminController@postReserveDis');
+Route::any('admin/reserve/cancel/{code}', 'AdminController@cancelReserve');
 
 Route::get('/admin/stock/reserve/{code}', 'AdminController@getStockReserve');
 Route::post('/admin/stock/reserve/{code}', 'AdminController@postStockReserve');
 
-Route::any('admin/stock/reserve/cancel/{code}', 'AdminController@cancelReserve');
-
 Route::get('/admin/customer', 'AdminController@getAllCustomer');
 Route::get('/admin/customer/add', 'AdminController@getAddCustomer');
 Route::post('/admin/customer/add', 'AdminController@postAddCustomer');
+Route::post('/admin/customer/del', 'AdminController@postDelCustomer');
 Route::get('/admin/customer/{id}', 'AdminController@getCustomer');
 Route::post('/admin/customer/{id}', 'AdminController@postCustomer');
 

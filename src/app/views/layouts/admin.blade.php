@@ -59,7 +59,8 @@
         <!--/.wrapper-->
         <div class="footer">
             <div class="container">
-                <b class="copyright">&copy; 2014 Edmin - EGrappler.com </b>All rights reserved.
+                <b class="copyright">&copy; 2014 Sommai</b>All rights reserved.
+                <p>{{PHP_Timer::resourceUsage()}}</p>
             </div>
         </div>
         <script src="{{asset('scripts/jquery-1.9.1.min.js')}}" type="text/javascript"></script>
@@ -106,5 +107,6 @@
             }
             window.onload=GetClock;
         </script>
+        @yield('script')
       
     </body>

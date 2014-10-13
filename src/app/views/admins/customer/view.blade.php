@@ -76,17 +76,17 @@
                             @endif
                             </td>
                             <td class="text-center">
-                                @if($reserve['payment'] == 0)
-                                <a class="btn btn-success" href="{{url('admin/stock/reserve/discount/'.$reserve['id'])}}">Discount</a>
-                                <p><a class="btn" href="{{url('admin/stock/reserve/cancel/'.$reserve['id'])}}">Cancel</a></p>
+                                @if($reserve['type'] == 0)
+                                <a class="btn btn-success" href="{{url('admin/reserve/discount/'.$reserve['id'])}}">Discount</a>
+                                <p><a class="btn" href="{{url('admin/reserve/cancel/'.$reserve['id'])}}">Cancel</a></p>
                                 @endif
                             </td>
                             <td class="text-center">
-                            <form method="post" class="form-horizontal row-fluid">
+                            <form method="post" class="form-horizontal row-fluid" action="{{url('admin/reserve/payment')}}">
                             <label class="checkbox inline">
                             <input type="hidden" name="payment" value="0" />
                             <input name="payment" type="checkbox" value="1" onChange="this.form.submit()"
-                                {{ $reserve['payment'] == '1' ? 'checked' : ''}} />
+                                {{ $reserve['type'] == '1' ? 'checked' : ''}} />
                             ชำระเงินเรียบร้อย
                             </label>
                             <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
