@@ -28,8 +28,21 @@
                         </button>
                         </form>
                         <ul class="nav pull-right">
-                            <li>
-                                <a href="#"></a>
+                            <li class="clock"><a href="#"><div id="clockbox"></div>
+                            </a></li>
+                            <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Menu<b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url('/admin') }}"><i class="menu-icon icon-dashboard"></i>Dashboard
+                                    </a></li>
+                                    <li><a href="{{ url('/admin/customer') }}"><i class="menu-icon icon-dashboard"></i>Customer
+                                    </a></li>
+                                    <li><a href="{{ url('/admin/reserve') }}"><i class="menu-icon icon-dashboard"></i>Reserve
+                                    </a></li>
+                                    <li><a href="{{url('/admin/stocks')}}"><i class="menu-icon icon-inbox"></i>Stocks<b class="label green pull-right">
+                                    -</b> </a></li>
+                                    <li><a href="{{url('/user/logout')}}"><i class="menu-icon icon-tasks"></i>Logout</a></li>
+                                </ul>
                             </li>
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{{asset('images/user.png')}}" class="nav-avatar" />

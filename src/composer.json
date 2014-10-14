@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"phpunit/php-timer": "~1.0"
+		"phpunit/php-timer": "~1.0",
+		"chumper/datatable": "2.*"
 	},
 	"autoload": {
 		"classmap": [

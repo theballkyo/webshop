@@ -1,8 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <div class="row">
-     @include('layouts.admin-nav')
-     <div class="span9">
+     <div class="span12">
         <div class="content">
             <div class="module">
                 <div class="module-head">
@@ -78,7 +77,7 @@
                                     {{Form::token()}}
                                 </form>
                                 <a class="btn btn-success" href="{{url('admin/reserve/discount/'.$reserve['id'])}}">Discount</a>
-                                <p><a class="btn" href="{{url('admin/reserve/cancel/'.$reserve['id'])}}">Cancel</a></p>
+                                <p><a class="btn" href="{{url('admin/reserve/cancel/'.$reserve['id'])}}" onclick="return confirm('ต้องการยกเลิกการจอง ?')">Cancel</a></p>
                             </td>
                             <td>{{date('d/m/Y h:i:s A', strtotime($reserve['created_at']))}}</td>
                         </tr>
@@ -201,5 +200,6 @@
         </div>
     </div>
     <!--/.span9-->
+    @include('layouts.admin-nav')
 </div>
 @stop

@@ -1,4 +1,4 @@
-<div class="span3">
+<!-- <div class="span12">
     <div class="sidebar">
         <ul class="widget widget-menu unstyled">
             <li class="clock"><a href="#"><div id="clockbox"></div>
@@ -13,8 +13,8 @@
             -</b> </a></li>
             <li><a href="{{url('/user/logout')}}"><i class="menu-icon icon-tasks"></i>Logout</a></li>
         </ul>
-        <!--/.widget-nav-->
+
     </div>
-    <!--/.sidebar-->
+
 </div>
 <!--/.span3-->

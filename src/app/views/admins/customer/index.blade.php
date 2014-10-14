@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
      @include('layouts.admin-nav')
-     <div class="span9">
+     <div class="span12">
         <div class="content">
             <div class="module">
                 <div class="module-head">
