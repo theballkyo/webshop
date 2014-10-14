@@ -28,10 +28,8 @@
                         </button>
                         </form>
                         <ul class="nav pull-right">
-                            <li class="clock"><a href="#"><div id="clockbox"></div>
-                            </a></li>
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Menu<b class="caret"></b></a>
+                                Main Menu<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ url('/admin') }}"><i class="menu-icon icon-dashboard"></i>Dashboard
                                     </a></li>
@@ -44,6 +42,7 @@
                                     <li><a href="{{url('/user/logout')}}"><i class="menu-icon icon-tasks"></i>Logout</a></li>
                                 </ul>
                             </li>
+
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="{{asset('images/user.png')}}" class="nav-avatar" />
                                 <b class="caret"></b></a>
@@ -55,6 +54,8 @@
                                     <li><a href="{{url('/user/logout')}}">Logout</a></li>
                                 </ul>
                             </li>
+                            <li class="clock"><a href="#"><div id="clockbox"></div>
+                            </a></li>
                         </ul>
                     </div>
                     <!-- /.nav-collapse -->
@@ -72,7 +73,7 @@
         <!--/.wrapper-->
         <div class="footer">
             <div class="container">
-                <b class="copyright">&copy; 2014 Sommai</b>All rights reserved. Version :: 0.8 beta
+                <b class="copyright">&copy; 2014 Sommai</b>All rights reserved. Version :: 0.8.1 beta
                 <p>{{PHP_Timer::resourceUsage()}}</p>
             </div>
         </div>
