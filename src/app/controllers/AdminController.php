@@ -260,35 +260,38 @@ class AdminController extends BaseController{
 	 */
 	public function cancelReserve($id)
 	{
-		$reserve = ProductsReserve::find($id)->join('products_stock', 'products_stock.code', '=', 'products_reserve.code_id')
-											  ->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount', 
-											  		 	'products_reserve.discount', 'products_reserve.discount_type', 'products_stock.price')
-											  ->first();
-		# Fixed id reserve
-		$reserve->id = $id;
+		$reserve = ProductsReserve::join('products_stock', 'products_stock.code', '=', 'products_reserve.code_id')
+									->where('products_reserve.id', '=', $id)
+									->select('products_reserve.id', 'products_reserve.cus_id', 'products_reserve.code_id', 'products_reserve.amount', 
+											  'products_reserve.discount', 'products_reserve.discount_type', 'products_stock.price')
+									->first();
 
 		if(empty($reserve))
 		{	
 			Session::flash('res_id_err', '');
 			return Redirect::back();
 		}
+		# Fixed id
+		#$reserve->id = $id;
+		$reserve->type = 2;
+		$reserve->save();
 
-		if($this->loadStock($reserve->code_id))
-		{
-			$this->stock->stock += $reserve->amount;
-			$this->stock->save();
-		}
+		// if($this->loadStock($reserve->code_id))
+		// {
+		// 	$this->stock->stock += $reserve->amount;
+		// 	$this->stock->save();
+		// }
 
-		$res_cancel = New ProductsReserveCancel;
-		$res_cancel->cus_id 		= $reserve->cus_id;
-		$res_cancel->code_id 		= $reserve->code_id;
-		$res_cancel->amount 		= $reserve->amount;
-		$res_cancel->price 			= $reserve->price;
-		$res_cancel->discount 		= $reserve->discount;
-		$res_cancel->discount_type 	= $reserve->discount_type;
-		$res_cancel->save();
+		// $res_cancel = New ProductsReserveCancel;
+		// $res_cancel->cus_id 		= $reserve->cus_id;
+		// $res_cancel->code_id 		= $reserve->code_id;
+		// $res_cancel->amount 		= $reserve->amount;
+		// $res_cancel->price 			= $reserve->price;
+		// $res_cancel->discount 		= $reserve->discount;
+		// $res_cancel->discount_type 	= $reserve->discount_type;
+		// $res_cancel->save();
 
-		$reserve->delete();
+		// $reserve->delete();
 
 		Session::flash('cancel_succ', '');
 		return Redirect::back();
@@ -345,17 +348,21 @@ class AdminController extends BaseController{
 	{
 		Input::flash();
 		$rules = array('amount' => 'required');
-		if(empty(Input::get('old_cus')))
+		$cus_id = Input::get('old_cus');
+
+		if(empty($cus_id))
 		{
 			$rules = array_add($rules, 'name', 'required');
 		}
+
 		$validator = Validator::make(Input::all(), $rules);
+
 		if($validator->fails())
 		{
 			return Redirect::action('AdminController@getStockReserve', array($code))->withErrors($validator->messages());
 		}
-		$cus_id = Input::get('old_cus');
-		if(empty(Input::get('old_cus')))
+
+		if(empty($cus_id))
 		{
 			$customer = New CustomerProfile;
 			$customer->name = Input::get('name');
@@ -385,6 +392,7 @@ class AdminController extends BaseController{
 		$reserve->stock_id = $this->stock->id;
 		$reserve->code_id = $code;
 		$reserve->amount = (int) Input::get('amount');
+		$reserve->note = Input::get('reserve_note');
 		$reserve->save();
 
 		Session::flash('success', '');
