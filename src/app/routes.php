@@ -30,6 +30,10 @@ Route::get('/user/logout', 'UserController@getLogout');
  *
  */
 Route::get('/admin/', 'AdminController@Index');
+
+Route::get('/admin/order/new', 'AdminController@newOrder');
+Route::post('/admin/order/new', 'AdminController@postNewOrder');
+
 Route::get('/admin/stocks', 'AdminController@getStocks');
 Route::get('/admin/stock/get/{pid}/{color}', 'AdminController@getStock');
 Route::post('/admin/stock/get/{pid}/{color}', 'AdminController@postStock');

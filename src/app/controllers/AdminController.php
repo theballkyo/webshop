@@ -211,7 +211,6 @@ class AdminController extends BaseController{
 			$r_wait[$i]['product'] = $this->loadProductFromCode($r_wait[$i]['code_id']);
 			$r_wait[$i]['price'] = $this->getPrice($r_wait[$i]['code_id']);
 		}
-
 		$i=0;
 		$count = $r_succ->count();
 		$r_succ->toArray();
@@ -685,4 +684,83 @@ class AdminController extends BaseController{
 		}
 		return Redirect::action('AdminController@getStocks');
 	}
+
+	/**
+	 * New order
+	 * Create new order 
+	 *
+	 */
+	public function newOrder($pid = 1)
+	{
+		$pid = 1;
+		$detail = [
+			'pd_c' => $this->getField($pid, 1),
+		    'pd_s' => $this->getField($pid, 2)
+		];
+		$detail['cus'] = CustomerProfile::orderBy('name', 'ASC')->get();
+		foreach ($detail['pd_c'] as $c) {
+			foreach ($detail['pd_s'] as $s) {
+				$code = $this->generateCode($pid, array($c->id, $s->id));
+				$stock = $this->stockProduct($code);
+				$detail['stock'][$c->id][$s->id]['stock'] = $stock->stock;
+				$detail['stock'][$c->id][$s->id]['code'] = $stock->id;
+			}
+		}
+
+		return View::make('admins.order.new', $detail);
+	}
+
+	/**
+	 * Create New order
+	 *
+	 */
+	public function postNewOrder()
+	{
+		$rules = array('amount' => 'required');
+		$cus_id = Input::get('old_cus');
+		if(empty($cus_id))
+		{
+			$rules = array_add($rules, 'name', 'required');
+		}
+
+		$validator = Validator::make(Input::all(), $rules);
+
+		if($validator->fails())
+		{
+			# return Redirect::action('AdminController@getStockReserve', array($code))->withErrors($validator->messages());
+		}
+
+		if(empty($cus_id))
+		{
+			$customer = New CustomerProfile;
+			$customer->name = Input::get('name');
+			$customer->address = Input::get('address');
+			$customer->email = Input::get('email');
+			$customer->tel = Input::get('tel');
+			$customer->note = Input::get('note');
+			$customer->save();
+			$cus_id = $customer->id;
+		}
+		foreach (Input::get('amount') as $id => $amount) {
+			if((int) $amount > 0)
+			{
+				$stock = ProductsStock::find($id);
+				$stock->stock -= abs($amount);
+				$stock->save();
+
+				$reserve = New ProductsReserve;
+				$reserve->stock_id = $stock->id;
+				$reserve->code_id = $stock->code;
+				$reserve->amount = $amount;
+				$reserve->cus_id = $cus_id;
+				$reserve->save();
+				$reserve_id[] = $reserve->id;
+			}
+		}
+		$order = New Order;
+		$order->reserve_id = implode(',', $reserve_id);
+		$order->cus_id = $cus_id;
+		$order->save();
+	}
+
 }

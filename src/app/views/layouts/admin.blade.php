@@ -28,6 +28,9 @@
                         </button>
                         </form>
                         <ul class="nav pull-right">
+                            <li class="nav-user">
+                                <a href="{{ url('/admin/order/new') }}">New Orders</a>
+                            </li>
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Main Menu<b class="caret"></b></a>
                                 <ul class="dropdown-menu">

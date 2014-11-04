@@ -54,10 +54,8 @@ class BaseController extends Controller {
 	{
 	 	$detail = ProductsDetailFields::with(array('data' => function($query) use ($pid, $data_id)
 		{
-			$query->join('products_detail_fields', 'products_detail_fields.id', '=', 'products_detail_data.fid')
-				->where('products_detail_data.pid', '=', $pid)
-				->whereIn('products_detail_data.id', $data_id)
-				->select(
+			$query->whereIn('products_detail_data.id', $data_id)
+				  ->select(
 					'products_detail_data.pid',
 					'products_detail_data.fid',
 					'products_detail_data.text',
@@ -72,12 +70,30 @@ class BaseController extends Controller {
 	}
 
 	/**
+	 * Get Field product detail
+	 * @prame Int $pid Product ID
+	 *        Int $fid Field ID > Optional
+	 * @return Object
+	 *
+	 */
+	protected function getField($pid, $fid = "")
+	{
+		$field = ProductsDetailData::where('pid', '=', $pid);
+		if(!empty($fid))
+			$field->where('fid', '=', $fid);
+		return $field->get();
+	}
+
+	/**
 	 * Get stock product
 	 *
 	 */
 	protected function stockProduct($code)
 	{
-	 	return ProductsStock::where('code', '=', $code)->select('stock')->first()->stock;
+	 	$s = ProductsStock::where('code', '=', $code)->select('id','stock')->first();
+	 	if(empty($s))
+	 		$this->createStock($code);
+	 	return $s;
 	}
 
 	/**
@@ -129,6 +145,22 @@ class BaseController extends Controller {
 	}
 
 	/**
+	 * Create Default stock
+	 * set amount product = 0
+	 * @prame Int $code
+	 */
+	public function createStock($code)
+	{
+		$this->stock = New ProductsStock;
+		$this->stock->stock = 0;
+		$this->stock->code = $code;
+		$this->stock->price = 0;
+		$this->stock->show = 0;
+		$this->stock->pid = $this->getID($code);
+		$this->stock->save();	
+	}
+
+	/**
 	 * Generate Stock code
 	 *	@prams  String Product ID, Array Product data ID
 	 *	@return String
@@ -148,6 +180,18 @@ class BaseController extends Controller {
 	protected function deGenerateCode($code)
 	{
 		return explode('-', $code);
+	}
+
+	/**
+	 * Get ID Product from Code Product
+	 * @param Int Code Product
+	 * @return ID Product
+	 *
+	 */
+	protected function getID($code)
+	{
+		$c = $this->deGenerateCode($code);
+		return $c[0];
 	}
 
 	/**
