@@ -34,9 +34,18 @@ Route::get('/admin/', 'AdminController@Index');
 Route::get('/admin/order/new', 'AdminController@newOrder');
 Route::post('/admin/order/new', 'AdminController@postNewOrder');
 
+Route::get('admin/order/view', 'AdminController@viewOrder');
+Route::get('admin/order/view/{id}', 'AdminController@showOrder');
+Route::post('admin/order/view/{id}', 'AdminController@postShowOrder');
+Route::get('admin/order/pay/{id}', 'AdminController@payOrder');
+Route::get('admin/order/cancel/{id}', 'AdminController@cancelOrder');
+
 Route::get('/admin/stocks', 'AdminController@getStocks');
 Route::get('/admin/stock/get/{pid}/{color}', 'AdminController@getStock');
 Route::post('/admin/stock/get/{pid}/{color}', 'AdminController@postStock');
+Route::get('/admin/stock/show/{pid}', 'AdminController@getShowStock');
+Route::post('/admin/stock/show/{pid}', 'AdminController@postShowStock');
+
 
 Route::get('/admin/products', 'AdminController@getProducts');
 Route::get('/admin/product/add/color/{pid}', 'AdminController@getAddColor');

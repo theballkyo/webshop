@@ -30,7 +30,9 @@
                                     <td>{{$c->text}}</td>
                                     @foreach($pd_s as $s)
                                         <td>
-                                            {{ Form::text("amount[" . $stock[$c->id][$s->id]['code'] ."]", '0', ['class' => 'span1']) }}
+                                            {{ Form::text("amount[" . $stock[$c->id][$s->id]['code'] ."]",
+                                            Input::old('amount['. $stock[$c->id][$s->id]['code'] .']'),
+                                            ['class' => 'span1']) }}
                                             <strong> / 
                                             @if($stock[$c->id][$s->id] > 0)
                                             <span class="success">{{$stock[$c->id][$s->id]['stock']}}</span>
@@ -68,7 +70,7 @@
                         <div class="control-group">
                             {{Form::label('name', 'Name *')}}
                             <div class="controls">
-                                {{Form::text('name', '', ['class' => 'span6'])}}
+                                {{Form::text('name', Input::old('name'), ['class' => 'span6'])}}
                                 @if($errors->has('name'))
                                 <span class="help-inline alert">{{ $errors->first('name') }}</span>
                                 @endif
@@ -77,25 +79,25 @@
                         <div class="control-group">
                             {{Form::label('address', 'Address')}}
                             <div class="controls">
-                                {{Form::textarea('name', '', ['class' => 'span6'])}}
+                                {{Form::textarea('address', Input::old('address'), ['class' => 'span6', 'rows' => 3])}}
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="basicinput">Email</label>
+                            {{Form::label('email', 'E-mail')}}
                             <div class="controls">
-                                <input name="email" type="text" id="basicinput" placeholder="" class="span6">
+                                {{Form::text('email', Input::old('email'), ['class' => 'span6'])}}    
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="basicinput">Tel.</label>
+                            {{Form::label('tel', 'Tel.')}}
                             <div class="controls">
-                                <input name="tel" type="text" id="basicinput" placeholder="" class="span6">
+                                {{Form::text('tel', Input::old('tel'), ['class' => 'span6'])}}    
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="basicinput">Note</label>
+                            {{Form::label('note', 'Note')}}
                             <div class="controls">
-                                <textarea name="note" class="span6" rows="3">Created By Admin</textarea>
+                                {{Form::textarea('note', Input::old('note'), ['class' => 'span6', 'rows' => '3'])}}
                             </div>
                         </div>
                     </div><!-- End span6 -->

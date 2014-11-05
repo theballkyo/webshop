@@ -17,7 +17,7 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="{{ url('/admin') }}">Sommai Stock Manager</a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="{{ url('/admin') }}">Sommai</a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav nav-icons">
                         </ul>
@@ -30,6 +30,9 @@
                         <ul class="nav pull-right">
                             <li class="nav-user">
                                 <a href="{{ url('/admin/order/new') }}">New Orders</a>
+                            </li>
+                            <li class="nav-user">
+                                <a href="{{ url('/admin/order/view') }}">View Orders</a>
                             </li>
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Main Menu<b class="caret"></b></a>

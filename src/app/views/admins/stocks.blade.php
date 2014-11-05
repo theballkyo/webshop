@@ -16,6 +16,7 @@
                         <h3>Name : {{$product['name']}}</h3>
                         <a href=" {{ url('admin/product/add/color/'. $product['id'])}} " class="btn btn-warning">เพิ่มสีสินค้า</a>
                         <a href=" {{ url('admin/product/add/size/'. $product['id'])}} " class="btn btn-warning">เพิ่ม Size สินค้า</a>
+                        <a href=" {{ url('admin/stock/show/'. $product['id'])}} " class="btn btn-info">แก้ไข Stock</a>
                         <p></p>
                         <table class="table table-striped table-bordered table-condensed">
                         <thead>

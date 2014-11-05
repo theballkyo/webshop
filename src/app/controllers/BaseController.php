@@ -21,7 +21,7 @@ class BaseController extends Controller {
 	{
 		$data_id = explode(',', $code);
 		# $detail['stock'] = $this->stockProduct($code);
-		$stock = ProductsStock::where('code', '=', $code)->first();
+		$stock = ProductsStock::where('code', '=', $code)->remember(1)->first();
 		//Not found product
 		if($stock == "")
 		{
@@ -45,9 +45,80 @@ class BaseController extends Controller {
 		return $product;
 	}
 
+	/**
+	 * Load product from Reserve ID
+	 * @param Array, Int $rid
+	 * @return Mixed
+	 *
+	 */
+	protected function loadProductRID($rid)
+	{
+		if(!is_array($rid))
+		{
+			$code = ProductsReserve::find($rid)->code_id;
+			$code = $this->deCode($code);
+
+			$product = Products::find($code[0])->first()->toArray();
+			$product['detail'] = $this->detailProduct($code[0], $code[1]);
+			return $product;
+		}
+		foreach ($rid as $id)
+		{
+			$reserve = ProductsReserve::find($id);
+			$code = $this->deCode($reserve->code_id);
+
+			$product[$reserve->id] = Products::find($code[0])->first()->toArray();
+			$product[$reserve->id]['detail'] = $this->detailProduct($code[0], $code[1]);
+
+			$stock = $this->loadStock($reserve->code_id);
+			$product[$reserve->id]['price'] = $stock->price;
+			$product[$reserve->id]['rid'] = $reserve->id;
+			$product[$reserve->id]['discount'] = $reserve->discount;
+			$product[$reserve->id]['dis_type'] = $reserve->discount_type;
+			$product[$reserve->id]['amount']   = $reserve->amount;
+
+		}
+		return $product;
+	}
+
 	protected function detailPDFromCode($code)
 	{
 		#$detail = Products
+	}
+
+	/**
+	 * Get detail product from reserve ID
+	 * @param Array,String $rid
+	 * @return Mixed
+	 *
+	 */
+	protected function getDetailRID($rid)
+	{
+		if(!is_array($rid))
+		{
+			$code = ProductsReserve::find($rid)->code_id;
+			$code = $this->deCode($code);
+			$detail = $this->detailProduct($code[0], $code[1]);
+			return $detail;
+		}
+		foreach ($rid as $id)
+		{
+			$code = ProductsReserve::find($id)->code_id;
+			$code = $this->deCode($code);
+			$detail[] = $this->detailProduct($code[0], $code[1]);
+		}
+		return $detail;
+	}
+
+	/**
+	 * Get detail product from reserve ID
+	 * @param Array,String $rid
+	 * @return Mixed
+	 *
+	 */
+	protected function getProductRID($rid)
+	{
+
 	}
 
 	protected function detailProduct($pid, $data_id)
@@ -92,7 +163,7 @@ class BaseController extends Controller {
 	{
 	 	$s = ProductsStock::where('code', '=', $code)->select('id','stock')->first();
 	 	if(empty($s))
-	 		$this->createStock($code);
+	 		$s = $this->createStock($code);
 	 	return $s;
 	}
 
@@ -157,7 +228,8 @@ class BaseController extends Controller {
 		$this->stock->price = 0;
 		$this->stock->show = 0;
 		$this->stock->pid = $this->getID($code);
-		$this->stock->save();	
+		$this->stock->save();
+		return $this->stock;
 	}
 
 	/**
@@ -180,6 +252,20 @@ class BaseController extends Controller {
 	protected function deGenerateCode($code)
 	{
 		return explode('-', $code);
+	}
+
+	/**
+	 * Decode of Stock code
+	 * @param String $code
+	 * @return Array -> PID, Field ID...
+	 *
+	 */
+	protected function deCode($code)
+	{
+		$de = explode('-', $code);
+		$pid = $de[0];
+		unset($de[0]);
+		return [$pid, $de];
 	}
 
 	/**
