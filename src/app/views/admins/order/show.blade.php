@@ -48,7 +48,7 @@
                     Address :: {{$order['address']}} </br>
                     Tel :: {{$order['tel']}} </br>
                     @if($order['type'] == 0)
-                    <a href="{{url('/admin/order/pay/'. $order['id'])}}" class="btn btn-warning">จ่ายเงินแล้ว</a>
+                    <a href="{{url('/admin/order/pay/'. $order['id'])}}" class="btn btn-success">จ่ายเงินแล้ว</a>
                     <a href="{{url('/admin/order/cancel/'. $order['id'])}}" class="btn btn-danger">ยกเลิก Order</a>
                     @elseif($order['type'] == 1)
                     <button class="btn btn-success">Order นี้ชำระเงินเรียบร้อยแล้ว</button>
