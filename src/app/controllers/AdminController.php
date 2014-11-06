@@ -859,7 +859,9 @@ class AdminController extends BaseController{
 				break;
 		}
 
+		// $orders = $orders->paginate(5);
 		$orders = $orders->get()->toArray();
+
 		$len = count($orders);
 
 		// for ($i=0;$i<$len;$i++) {
