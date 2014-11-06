@@ -847,9 +847,9 @@ class AdminController extends BaseController{
 			case 3:
 				# Order open time > 1 Day
 				$date = new DateTime();
-				$date->setTimestamp(time() - (60*60*24));
+				$date->setTimestamp($date->getTimestamp() - (60*60*24));
 		
-				# $orders->where('type', '=', 0);
+				$orders->where('type', '=', 0);
 				$orders->where('updated_at', '<', $date->format('Y-m-d H:i:s'));
 				break;
 			case 4:
