@@ -17,12 +17,9 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.html">Sommai</a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="{{ url('/admin') }}">Sommai</a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav nav-icons">
-                            <li class="active"><a href="#"><i class="icon-envelope"></i></a></li>
-                            <li><a href="#"><i class="icon-eye-open"></i></a></li>
-                            <li><a href="#"><i class="icon-bar-chart"></i></a></li>
                         </ul>
                         <form class="navbar-search pull-left input-append" action="#">
                         <input type="text" class="span3">
@@ -31,28 +28,40 @@
                         </button>
                         </form>
                         <ul class="nav pull-right">
-                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown
-                                <b class="caret"></b></a>
+                            <li class="nav-user">
+                                <a href="{{ url('/admin/order/new') }}">New Orders</a>
+                            </li>
+                            <li class="nav-user">
+                                <a href="{{ url('/admin/order/view') }}">View Orders</a>
+                            </li>
+                            <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Main Menu<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Item No. 1</a></li>
-                                    <li><a href="#">Don't Click</a></li>
-                                    <li class="divider"></li>
-                                    <li class="nav-header">Example Header</li>
-                                    <li><a href="#">A Separated link</a></li>
+                                    <li><a href="{{ url('/admin') }}"><i class="menu-icon icon-dashboard"></i>Dashboard
+                                    </a></li>
+                                    <li><a href="{{ url('/admin/customer') }}"><i class="menu-icon icon-dashboard"></i>Customer
+                                    </a></li>
+                                    <li><a href="{{ url('/admin/reserve') }}"><i class="menu-icon icon-dashboard"></i>Reserve
+                                    </a></li>
+                                    <li><a href="{{url('/admin/stocks')}}"><i class="menu-icon icon-inbox"></i>Stocks<b class="label green pull-right">
+                                    -</b> </a></li>
+                                    <li><a href="{{url('/user/logout')}}"><i class="menu-icon icon-tasks"></i>Logout</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">Support </a></li>
+
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="images/user.png" class="nav-avatar" />
+                                <img src="{{asset('images/user.png')}}" class="nav-avatar" />
                                 <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">Your Profile</a></li>
                                     <li><a href="#">Edit Profile</a></li>
                                     <li><a href="#">Account Settings</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="#">Logout</a></li>
+                                    <li><a href="{{url('/user/logout')}}">Logout</a></li>
                                 </ul>
                             </li>
+                            <li class="clock"><a href="#"><div id="clockbox"></div>
+                            </a></li>
                         </ul>
                     </div>
                     <!-- /.nav-collapse -->
@@ -70,15 +79,54 @@
         <!--/.wrapper-->
         <div class="footer">
             <div class="container">
-                <b class="copyright">&copy; 2014 Edmin - EGrappler.com </b>All rights reserved.
+                <b class="copyright">&copy; 2014 Sommai</b>All rights reserved. Version :: 0.8.1 beta
+                <p>{{PHP_Timer::resourceUsage()}}</p>
             </div>
         </div>
         <script src="{{asset('scripts/jquery-1.9.1.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/jquery-ui-1.10.1.custom.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
+        <!--
         <script src="{{asset('scripts/flot/jquery.flot.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/flot/jquery.flot.resize.js')}}" type="text/javascript"></script>
-        <script src="{{asset('scripts/datatables/jquery.dataTables.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/common.js" type="text/javascript')}}"></script>
+        -->
+        <script src="{{asset('scripts/datatables/jquery.dataTables.js')}}" type="text/javascript"></script>
+        <script type="text/javascript">
+        function GetClock(){
+            tzOffset = {{date('Z')/60/60}};//set this to the number of hours offset from UTC
+
+            d = new Date();
+            dx = d.toGMTString();
+            dx = dx.substr(0,dx.length -3);
+            d.setTime(Date.parse(dx))
+            d.setHours(d.getHours() + tzOffset);
+
+            nday   = d.getDay();
+            nmonth = d.getMonth();
+            ndate  = d.getDate();
+            nyear = d.getYear();
+            nhour  = d.getHours();
+            nmin   = d.getMinutes();
+            nsec   = d.getSeconds();
+
+            if(nyear<1000) nyear=nyear+1900;
+
+                 if(nhour ==  0) {ap = " AM";nhour = 12;} 
+            else if(nhour <= 11) {ap = " AM";} 
+            else if(nhour == 12) {ap = " PM";} 
+            else if(nhour >= 13) {ap = " PM";nhour -= 12;}
+
+            if(nmin <= 9) {nmin = "0" +nmin;}
+            if(nsec <= 9) {nsec = "0" +nsec;}
+
+
+            document.getElementById('clockbox').innerHTML="ขณะนี้เวลา :: "+ndate+"/"+(nmonth+1)+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
+            setTimeout(function(){GetClock()}, 1000); 
+
+            }
+            window.onload=GetClock;
+        </script>
+        @yield('script')
       
     </body>

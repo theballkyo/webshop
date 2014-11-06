@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
      @include('layouts.admin-nav')
-     <div class="span9">
+     <div class="span12">
         <div class="content">
             <div class="module">
                 <div class="module-head">
@@ -16,6 +16,11 @@
                         <strong>Message :: </strong>
                         ทำการอัพเดทข้อมูลเรียบร้อยแล้ว
                     </div>
+                    @elseif(Session::has('cancel_succ'))
+                    <div class="alert alert-success">
+                        <strong>Message :: </strong>
+                        ยกเลิกรายการจองเรียบร้อยแล้ว
+                    </div>
                     @elseif($errors->has('name'))
                     <div class="alert alert-error">
                         <strong>Message :: </strong>
@@ -25,10 +30,16 @@
                     <table class="table table-striped table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <th style="width:1" class="text-center">Product name</th>
-                            <th style="width:20%" class="text-center">Color</th>
-                            <th class="text-center">Size</th>
-                            <th class="text-center">Amount</th>
+                            <th style="width:20%" class="text-center">Product name</th>
+                            <th style="width:5%" class="text-center">Color</th>
+                            <th style="width:5%" class="text-center">Size</th>
+                            <th style="width:5%" class="text-center">Amount</th>
+                            <th style="width:5%">Price</th>
+                            <th>Discount price</th>
+                            <th>Discount Type</th>
+                            <th class="text-center">Do</th>
+                            <th style="width:15%"class="text-center">Payment</th>
+                            <th>Reserve Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,10 +50,55 @@
                             <td>{{$detail['data']['text']}}</td>
                             @endforeach
                             <td>{{$reserve['amount']}}</td>
+                            <td>{{$reserve['price']}}</td>
+                            <td>
+                            @if($reserve['discount_type'] == 0)
+                                {{$reserve['price']}}
+                            @elseif($reserve['discount_type'] == 1)
+                                {{$reserve['price'] - $reserve['discount']}}
+                            @elseif($reserve['discount_type'] == 2)
+                                {{ ceil(($reserve['price'] ) * ((100 - $reserve['discount']) / 100)) }}
+                            @elseif($reserve['discount_type'] == 3)
+                                {{$reserve['discount']}}
+                            @elseif($reserve['discount_type'] == 4)
+                            @endif
+                            </td>
+                            <td>
+                            @if($reserve['discount_type'] == 0)
+                                0 บาท
+                            @elseif($reserve['discount_type'] == 1)
+                                ลดไป {{ $reserve['discount'] }} บาท
+                            @elseif($reserve['discount_type'] == 2)
+                                {{ $reserve['discount'] }} %
+                            @elseif($reserve['discount_type'] == 3)
+                                ลดเหลือ {{$reserve['discount']}} บาท
+                            @elseif($reserve['discount_type'] == 4)
+                            @endif
+                            </td>
+                            <td class="text-center">
+                                @if($reserve['type'] == 0)
+                                <a class="btn btn-success" href="{{url('admin/reserve/discount/'.$reserve['id'])}}">Discount</a>
+                                <p><a class="btn" href="{{url('admin/reserve/cancel/'.$reserve['id'])}}" onclick="return confirm('ต้องการยกเลิกการจอง ?')">Cancel</a></p>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                            <form method="post" class="form-horizontal row-fluid" action="{{url('admin/reserve/payment')}}">
+                            <label class="checkbox inline">
+                            <input type="hidden" name="payment" value="0" />
+                            <input name="payment" type="checkbox" value="1" onChange="this.form.submit()"
+                                {{ $reserve['type'] == '1' ? 'checked' : ''}} />
+                            ชำระเงินเรียบร้อย
+                            </label>
+                            <input type="hidden" name="reserve_id" value="{{$reserve['id']}}" />
+                            {{Form::token()}}
+                            </form>
+                            </td>
+                            <td>{{date('d/m/Y h:i:s A', strtotime($reserve['created_at']))}}</td>
                         </tr>
                     @endforeach
                     </tbody>
                     </table>
+                    <p>* ช่อง Payment ถ้าติ๊กถูกคือชำระเงินเรียบร้อยแล้ว</p>
                     <h2>Customer profile</h2>
                     <form class="form-horizontal row-fluid" method="post" 
                                 onsubmit="return confirm('คุณต้องการแก้ไขข้อมูลนี้หรือไม่ ?');">

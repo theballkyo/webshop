@@ -32,4 +32,9 @@ class TestController extends BaseController
 		print_r($n);
 		var_dump($products);
 	}
+
+	public function test2()
+	{
+		dd(date('m/d/Y h:i:s a', time()));
+	}
 }
