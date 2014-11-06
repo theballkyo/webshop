@@ -13,7 +13,9 @@
                         ขณะนี้กำลังอยู่ช่วงทดสอบระบบอยู่อาจมีปัญหาบางอย่าง !
                     </div>
                     <h3>New order</h3>
-                    *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ
+                    *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ <br/>
+                    <a href=" {{ url('admin/stock/show/1')}} " class="btn btn-info">แก้ไข Stock</a>
+                        
                     {{Form::open()}}
                     <table class="table table-striped">
                         <thead>

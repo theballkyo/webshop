@@ -339,6 +339,7 @@ class AdminController extends BaseController{
 				$stock = $this->stockProduct($code);
 				$detail['stock'][$c->id][$s->id]['stock'] = $stock->stock;
 				$detail['stock'][$c->id][$s->id]['code'] = $stock->id;
+				$detail['stock'][$c->id][$s->id]['price'] =$stock->price;
 			}
 		}
 		return View::make('admins.stock.show', $detail);
@@ -351,12 +352,20 @@ class AdminController extends BaseController{
 	public function postShowStock($pid)
 	{
 		foreach (Input::get('amount') as $id => $amount) {
-			if((int) $amount > 0)
+			if((int) $amount !=0)
 			{
 				$stock = ProductsStock::find($id);
-				$stock->stock = abs($amount);
-				$stock->save();
+				$stock->stock += $amount;
 			}
+			if((int) Input::get('price')[$id] > 0)
+			{
+				if(empty($stock))
+					$stock = ProductsStock::find($id);
+
+				$stock->price = Input::get('price')[$id];
+			}
+			if(!empty($stock))
+				$stock->save();
 		}
 		return Redirect::back()->with('msg', 'ok');
 	}

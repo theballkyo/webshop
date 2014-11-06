@@ -161,7 +161,7 @@ class BaseController extends Controller {
 	 */
 	protected function stockProduct($code)
 	{
-	 	$s = ProductsStock::where('code', '=', $code)->select('id','stock')->first();
+	 	$s = ProductsStock::where('code', '=', $code)->select('id', 'stock', 'price')->first();
 	 	if(empty($s))
 	 		$s = $this->createStock($code);
 	 	return $s;

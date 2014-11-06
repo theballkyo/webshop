@@ -38,6 +38,18 @@
                                             @else
                                             <span class="warning">{{$stock[$c->id][$s->id]['stock']}}</span>
                                             @endif
+                                            ชิ้น
+                                            </strong><br/>
+                                            {{ Form::text("price[" . $stock[$c->id][$s->id]['code'] ."]",
+                                            Input::old('price['. $stock[$c->id][$s->id]['code'] .']'),
+                                            ['class' => 'span1']) }}
+                                            <strong> / 
+                                            @if($stock[$c->id][$s->id] > 0)
+                                            <span class="success">{{$stock[$c->id][$s->id]['price']}}</span>
+                                            @else
+                                            <span class="warning">{{$stock[$c->id][$s->id]['price']}}</span>
+                                            @endif
+                                            บาท
                                             </strong>
                                         </td>
                                     @endforeach
@@ -47,7 +59,7 @@
                     </table>
                 <div class="control-group">
                     <div class="controls">
-                        <button type="submit" class="btn btn-info btn-large">Edit Stock</button>
+                        <button type="submit" class="btn btn-info btn-large">แก้ไข Stock</button>
                     </div>
                 </div>
                         {{Form::token()}}
