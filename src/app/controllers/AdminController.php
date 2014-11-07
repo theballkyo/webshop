@@ -833,7 +833,7 @@ class AdminController extends BaseController{
 						);
 						# ->orderBy('id', 'DECS');
 		switch ($type) {
-			case 0:
+			case 6:
 				# Order is waiting for payment
 				$orders->where('type', '=', 0);
 				break;
@@ -855,6 +855,10 @@ class AdminController extends BaseController{
 				break;
 			case 4:
 				# All orders
+				break;
+			case 5:
+				# Order is sender
+				$orders->where('type' ,'=', 3);
 				break;
 			default:
 				break;
@@ -949,6 +953,34 @@ class AdminController extends BaseController{
 		$order->save();
 
 		return Redirect::back()->with('msg', "Order #$order->id is cancel");
+	}
+
+	/**
+	 * Print all orders is status pay
+	 * and saved print order in log
+	 *
+	 */
+	public function printOrder()
+	{
+		$orders = Order::where('type', '=', 1)->get();
+
+		foreach($orders as $order)
+		{
+			$order->type = 3;
+			$order->save();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Reprint order
+	 * Show print order is printed
+	 *
+	 */
+	public function rePrintOrder()
+	{
+
 	}
 
 }
