@@ -11,6 +11,7 @@ class AdminController extends BaseController{
 
 	public function Index()
 	{
+		return Redirect::action('AdminController@newOrder');
 		Session::flash('error', 'True');
 		Session::push('error.msg', 'developers');
 		Session::push('error.msg', 'developers2');
@@ -820,7 +821,7 @@ class AdminController extends BaseController{
 	 */
 	public function viewOrder()
 	{
-		$type = !empty(Input::get('type')) ? Input::get('type') : 0;
+		$type = !empty(Input::get('type')) ? Input::get('type') : 4;
 
 		$orders = Order::join('customer_profile', 'customer_profile.id', '=', 'order.cus_id')
 						->select(
@@ -829,8 +830,8 @@ class AdminController extends BaseController{
 							'order.id',
 							'order.updated_at',
 							'order.type'
-						)
-						->orderBy('id', 'DECS');
+						);
+						# ->orderBy('id', 'DECS');
 		switch ($type) {
 			case 0:
 				# Order is waiting for payment
