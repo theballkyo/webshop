@@ -4,6 +4,13 @@ class AdminController extends BaseController{
 
 	private $pid = 0;
 
+	private $source = [
+				'1' => 'Line',
+				'2' => 'สมหมาย',
+				'3' => 'ขายกางเกง',
+				'4' => 'Web'
+			];
+
 	public function __construct()
     {
         $this->beforeFilter('auth.admin');
@@ -643,6 +650,7 @@ class AdminController extends BaseController{
 				# Field color id = 1
 				$detail->fid = 1;
 				$detail->text = Input::get('color');
+				$detail->code = Input::get('color_hex');
 				$detail->imgurl = Input::get('color_img');
 				$detail->save();
 				Session::flash('msg.type', 'success');
@@ -810,6 +818,7 @@ class AdminController extends BaseController{
 		$order = New Order;
 		$order->reserve_id = implode(',', $reserve_id);
 		$order->cus_id = $cus_id;
+		$order->source = $this->source[Input::get('source')];
 		$order->save();
 
 		return Redirect::action('AdminController@viewOrder')->with('msg', 'Created Order!');
@@ -829,9 +838,10 @@ class AdminController extends BaseController{
 							'customer_profile.tel',
 							'order.id',
 							'order.updated_at',
-							'order.type'
-						);
-						# ->orderBy('id', 'DECS');
+							'order.type',
+							'order.source'
+						)
+						->orderBy('id', 'DECS');
 		switch ($type) {
 			case 6:
 				# Order is waiting for payment
@@ -895,7 +905,8 @@ class AdminController extends BaseController{
 							'order.id',
 							'order.updated_at',
 							'order.reserve_id',
-							'order.type'
+							'order.type',
+							'order.source'
 						)
 						->where('order.id', '=', $id)
 						->orderBy('id', 'DECS')
@@ -964,13 +975,24 @@ class AdminController extends BaseController{
 	{
 		$orders = Order::where('type', '=', 1)->get();
 
+		if(empty($orders))
+		{
+			return Redirect::action('AdminController@viewOrder');
+		}
+
 		foreach($orders as $order)
 		{
 			$order->type = 3;
 			$order->save();
+			
+			$order_id[] = $order->id;
 		}
+		# dd(implode(',', $order_id));
+		$log = New PrintLog;
+		$log->order_id = implode(',', $order_id);
+		$log->save();
 
-		return true;
+		return Redirect::action('AdminController@viewPrintOrder');
 	}
 
 	/**
@@ -980,7 +1002,90 @@ class AdminController extends BaseController{
 	 */
 	public function rePrintOrder()
 	{
+		$log = PrintLog::orderBy('id', 'desc')->first();
+		$o_id = explode(',', $log->order_id);
+		$orders = Order::join('customer_profile', 'customer_profile.id', '=', 'order.cus_id')
+						->select(
+							'customer_profile.name',
+							'customer_profile.tel',
+							'customer_profile.address',
+							'order.id',
+							'order.updated_at',
+							'order.reserve_id',
+							'order.type',
+							'order.source'
+						)
+						->whereIn('order.id', $o_id)
+						->orderBy('id', 'DECS')
+						->get()
+						->toArray();
+		$c = count($orders);
+		if(!empty($c))
+		{
+			for($i=0;$i<$c;$i++)
+			{
+				$rid = explode(',', $orders[$i]['reserve_id']);
 
+				$orders[$i]['pd'] = $this->loadProductRID($rid);
+			}
+			# print '<pre>';
+			# dd($orders);
+		}
+	
+		return View::make('admins.print.home', ['orders' => $orders]);
+		$pdf = new \Thujohn\Pdf\Pdf();
+		$html = View::make('admins.print.home', ['orders' => $orders]);
+		$html = mb_convert_encoding($html, 'UTF-8', 'auto');
+		$content = $pdf->load($html)->show();
+    	# File::put(public_path('test'.$i.'.pdf'), $content);
+		# $pdf = PDF::load($html, 'A4', 'portrait')->output();
+	}
+
+	/**
+	 * View print order
+	 *
+	 */
+	public function viewPrintOrder()
+	{
+		
+		$orders = Order::join('customer_profile', 'customer_profile.id', '=', 'order.cus_id')
+						->select(
+							'customer_profile.name',
+							'customer_profile.tel',
+							'customer_profile.address',
+							'order.id',
+							'order.updated_at',
+							'order.reserve_id',
+							'order.type',
+							'order.source'
+						)
+						->where('type', '=', 3)
+						->orderBy('id', 'DECS')
+						->get()
+						->toArray();
+		$c = count($orders);
+		if(!empty($c))
+		{
+			for($i=0;$i<$c;$i++)
+			{
+				$rid = explode(',', $orders[$i]['reserve_id']);
+
+				$orders[$i]['pd'] = $this->loadProductRID($rid);
+			}
+			# print '<pre>';
+			# dd($orders);
+		}
+	
+		# return View::make('admins.print.home', ['orders' => $orders]);
+		$pdf = new \Thujohn\Pdf\Pdf();
+		$mpdf=new mPDF();
+		$html = View::make('admins.print.home', ['orders' => $orders]);
+		$mpdf->WriteHTML($html);
+		$mpdf->Output();
+		$html = mb_convert_encoding($html, 'UTF-8', 'auto');
+		$content = $pdf->load($html)->show();
+    	# File::put(public_path('test'.$i.'.pdf'), $content);
+		# $pdf = PDF::load($html, 'A4', 'portrait')->output();
 	}
 
 }

@@ -34,6 +34,10 @@ Route::get('/admin/', 'AdminController@Index');
 Route::get('/admin/order/new', 'AdminController@newOrder');
 Route::post('/admin/order/new', 'AdminController@postNewOrder');
 
+Route::get('admin/order/print', 'AdminController@printOrder');
+Route::get('admin/order/print/view', 'AdminController@viewPrintOrder');
+Route::get('admin/order/print/re', 'AdminController@rePrintOrder');
+
 Route::get('admin/order/view', 'AdminController@viewOrder');
 Route::get('admin/order/view/{id}', 'AdminController@showOrder');
 Route::post('admin/order/view/{id}', 'AdminController@postShowOrder');

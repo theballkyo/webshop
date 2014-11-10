@@ -22,14 +22,15 @@
                     <a href="{{url('/admin/order/view?type=2')}}" class="btn btn-danger">ยกเลิกแล้ว</a>
                     <a href="{{url('/admin/order/view?type=4')}}" class="btn btn-info">ทั้งหมด</a>
                     <br/><br/>
-                    <a href="" class="btn btn-success">Print orders</a>
-                    <a href="" class="btn btn-info">Reprint orders</a>
+                    <a href="{{url('admin/order/print')}}" class="btn btn-success">Print orders</a>
+                    <a href="{{url('admin/order/print/re')}}" class="btn btn-info">Reprint orders</a>
                     <br/>
                     <table class="table table-striped">
                     	<thead>
                     		<tr>
                     			<th>#ID</th>
                     			<th>Name</th>
+                                <th>Source</th>
                     			<th>Time</th>
                                 <th>View / Pay / Cancel</th>
                                 <th>Type</th>
@@ -40,6 +41,7 @@
 		                    <tr>
 		                    	<td>{{$order['id']}}</td>
 		                    	<td>{{$order['name']}}</td>
+                                <td>{{$order['source']}}</td>
 		                    	<td>{{$order['updated_at']}}</td>
                                 <td>
                                     <a href="{{url('/admin/order/view/'. $order['id'])}}" class="btn btn-primary">ดูสินค้า</a>

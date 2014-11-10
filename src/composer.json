@@ -6,7 +6,9 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"phpunit/php-timer": "~1.0",
-		"chumper/datatable": "2.*"
+		"chumper/datatable": "2.*",
+		"thujohn/pdf": "dev-master",
+		"mpdf/mpdf": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

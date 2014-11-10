@@ -45,6 +45,7 @@
                     </table>
                     Total Price :: {{$total}} บาท <br/>
                     Name :: {{$order['name']}} <br/>
+                    ที่มา :: {{$order['source']}} <br/>
                     Address :: {{$order['address']}} </br>
                     Tel :: {{$order['tel']}} </br>
                     @if($order['type'] == 0)

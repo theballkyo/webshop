@@ -37,6 +37,15 @@
                             </div>
                         </div>
                         <div class="control-group">
+                            <label class="control-label" for="color_hex">Color hex</label>              
+                            <div class="controls">
+                                <input id="color_hex" name="color_hex" type="text" class="span8">
+                                @if($errors->has('color_hex'))
+                                <span class="help-inline alert">{{ $errors->first('color_hex') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="control-group">
                             <label class="control-label" for="color_img">Color Image</label>
                             <div class="controls">
                                 <input id="color_img" name="color_img" type="text" class="span8">

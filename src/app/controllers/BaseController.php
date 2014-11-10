@@ -131,7 +131,8 @@ class BaseController extends Controller {
 					'products_detail_data.fid',
 					'products_detail_data.text',
 					'products_detail_data.imgurl',
-					'products_detail_data.id'
+					'products_detail_data.id',
+					'products_detail_data.code'
 					);
 		}
 		))

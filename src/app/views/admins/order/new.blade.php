@@ -49,6 +49,7 @@
                         </tbody>
                     </table>
                     <div class="row">
+                        <!--
                         <div class="span5">
                         <h2>รายชื่อลูกค้าเก่า</h2>
                         <div class="control-group">
@@ -67,39 +68,51 @@
                                 </div>
                         </div>
                         </div>
-                    <div class="span6">
+                    -->
+                    <div class="span11">
                     <p><h2>เพิ่มข้อมูลลูกค้าใหม่</h2></p>
                         <div class="control-group">
                             {{Form::label('name', 'Name *')}}
                             <div class="controls">
-                                {{Form::text('name', Input::old('name'), ['class' => 'span6'])}}
+                                {{Form::text('name', Input::old('name'), ['class' => 'span11'])}}
                                 @if($errors->has('name'))
                                 <span class="help-inline alert">{{ $errors->first('name') }}</span>
                                 @endif
                             </div>
                         </div>
                         <div class="control-group">
+                            <div class="controls">
+                                {{Form::label('source', 'ที่มา')}}
+                                <select name="source" tabindex="1" data-placeholder="ที่มา" class="span11">
+                                    <option value="1">Line</option>
+                                    <option value="2">สมหมาย</option>
+                                    <option value="3">ขายกางเกง</option>
+                                    <option value="4">Web</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
                             {{Form::label('address', 'Address')}}
                             <div class="controls">
-                                {{Form::textarea('address', Input::old('address'), ['class' => 'span6', 'rows' => 3])}}
+                                {{Form::textarea('address', Input::old('address'), ['class' => 'span11', 'rows' => 3])}}
                             </div>
                         </div>
                         <div class="control-group">
                             {{Form::label('email', 'E-mail')}}
                             <div class="controls">
-                                {{Form::text('email', Input::old('email'), ['class' => 'span6'])}}    
+                                {{Form::text('email', Input::old('email'), ['class' => 'span11'])}}    
                             </div>
                         </div>
                         <div class="control-group">
                             {{Form::label('tel', 'Tel.')}}
                             <div class="controls">
-                                {{Form::text('tel', Input::old('tel'), ['class' => 'span6'])}}    
+                                {{Form::text('tel', Input::old('tel'), ['class' => 'span11'])}}    
                             </div>
                         </div>
                         <div class="control-group">
                             {{Form::label('note', 'Note')}}
                             <div class="controls">
-                                {{Form::textarea('note', Input::old('note'), ['class' => 'span6', 'rows' => '3'])}}
+                                {{Form::textarea('note', Input::old('note'), ['class' => 'span11', 'rows' => '3'])}}
                             </div>
                         </div>
                     </div><!-- End span6 -->
@@ -115,6 +128,6 @@
             </div>
         </div>
     </div>
-    <!--/.span12-->
+    <!--/.span11-->
 </div>
 @stop
