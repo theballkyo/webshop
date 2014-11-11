@@ -52,7 +52,7 @@ class OrderController extends BaseController
 
 		if($validator->fails())
 		{
-			return Redirect::action('AdminController@newOrder')->withErrors($validator->messages());
+			return Redirect::action('OrderController@newOrder')->withErrors($validator->messages());
 		}
 
 		if(empty($cus_id))
@@ -88,7 +88,7 @@ class OrderController extends BaseController
 		$order->source = $this->source[Input::get('source')];
 		$order->save();
 
-		return Redirect::action('AdminController@viewOrder')->with('msg', 'Created Order!');
+		return Redirect::action('OrderController@viewOrder')->with('msg', 'Created Order!');
 	}
 
 	/**
@@ -245,7 +245,7 @@ class OrderController extends BaseController
 		if($orders->count() < 1)
 		{
 			Session::flash('msg', 'ไม่มี Order ที่มีสถานะจ่ายเงินแล้ว');
-			return Redirect::action('AdminController@viewOrder');
+			return Redirect::action('OrderController@viewOrder');
 		}
 
 		foreach($orders as $order)
@@ -260,7 +260,7 @@ class OrderController extends BaseController
 		$log->order_id = implode(',', $order_id);
 		$log->save();
 
-		return Redirect::action('AdminController@rePrintOrder');
+		return Redirect::action('OrderController@rePrintOrder');
 	}
 
 	/**
