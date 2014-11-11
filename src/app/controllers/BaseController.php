@@ -71,6 +71,7 @@ class BaseController extends Controller {
 			$product[$reserve->id]['detail'] = $this->detailProduct($code[0], $code[1]);
 
 			$stock = $this->loadStock($reserve->code_id);
+
 			$product[$reserve->id]['price'] = $stock->price;
 			$product[$reserve->id]['rid'] = $reserve->id;
 			$product[$reserve->id]['discount'] = $reserve->discount;
@@ -202,6 +203,7 @@ class BaseController extends Controller {
 			return False;
 
 		$this->stock = ProductsStock::where('code', '=', $code)->first();
+
 		#If empty, create new
 		if(empty($this->stock))
 		{

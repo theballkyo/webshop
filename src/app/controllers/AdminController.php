@@ -4,13 +4,6 @@ class AdminController extends BaseController{
 
 	private $pid = 0;
 
-	private $source = [
-				'1' => 'Line',
-				'2' => 'สมหมาย',
-				'3' => 'ขายกางเกง',
-				'4' => 'Web'
-			];
-
 	public function __construct()
     {
         $this->beforeFilter('auth.admin');

@@ -12,6 +12,12 @@
                         <strong>Warning :: </strong>
                         ขณะนี้กำลังอยู่ช่วงทดสอบระบบอยู่อาจมีปัญหาบางอย่าง !
                     </div>
+                    @if(!empty(Session::get('msg')))
+                    <div class="alert warning">
+                        <strong>ข้อความ :: </strong>
+                        {{Session::get('msg')}}
+                    </div>
+                    @endif
                     <h3>New order</h3>
                     *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ <br/>
                     <a href=" {{ url('admin/stock/show/1')}} " class="btn btn-info">แก้ไข Stock</a>

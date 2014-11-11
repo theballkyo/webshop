@@ -1,6 +1,12 @@
 <?php
 class OrderController extends BaseController
 {
+	private $source = [
+				'1' => 'Line',
+				'2' => 'สมหมาย',
+				'3' => 'ขายกางเกง',
+				'4' => 'Web'
+			];
 
 	public function __construct()
     {
@@ -52,6 +58,7 @@ class OrderController extends BaseController
 
 		if($validator->fails())
 		{
+			Session::flash('msg', 'กรุณากรอกข้อมูลลูกค้าให้ถูกต้อง');
 			return Redirect::action('OrderController@newOrder')->withErrors($validator->messages());
 		}
 
@@ -271,6 +278,8 @@ class OrderController extends BaseController
 	public function rePrintOrder()
 	{
 		$log = PrintLog::orderBy('id', 'desc')->first();
+		if(empty($log))
+			return Redirect::action('OrderController@viewOrder');
 		$o_id = explode(',', $log->order_id);
 		$orders = Order::join('customer_profile', 'customer_profile.id', '=', 'order.cus_id')
 						->select(
