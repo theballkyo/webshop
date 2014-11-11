@@ -73,7 +73,7 @@
 		                    @endforeach
                     	</tbody>
                     </table>
-
+                    <?php echo $orders->links(); ?>
                 </div>
             </div>
         </div>

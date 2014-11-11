@@ -149,7 +149,7 @@ class AdminController extends BaseController{
 	 */
 	public function getAllCustomer()
 	{
-		$cus_users = CustomerProfile::all();
+		$cus_users = CustomerProfile::paginate(10);
 		return View::make('admins.customer.index', array('cus_users' => $cus_users));
 	}
 

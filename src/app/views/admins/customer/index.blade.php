@@ -53,6 +53,7 @@
                     @endforeach
                 	</tbody>
                 	</table>
+                    {{$cus_users->links()}}
                 </div>
             </div>
         </div>

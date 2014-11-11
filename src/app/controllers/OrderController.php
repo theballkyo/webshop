@@ -148,10 +148,8 @@ class OrderController extends BaseController
 				break;
 		}
 
-		// $orders = $orders->paginate(5);
-		$orders = $orders->get()->toArray();
-
-		$len = count($orders);
+		$orders = $orders->paginate(30);
+		#$orders = $orders->get()->toArray();
 
 		// for ($i=0;$i<$len;$i++) {
 		// 	$reserve = explode(',' ,$orders[$i]['reserve_id']);
