@@ -15,23 +15,27 @@
                     <h3>New order</h3>
                     *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ <br/>
                     <a href=" {{ url('admin/stock/show/1')}} " class="btn btn-info">แก้ไข Stock</a>
-                        
+                    <a href=" {{ url('admin/product/add/color/1')}} " class="btn btn-warning">เพิ่มสีสินค้า</a>
+                    <a href=" {{ url('admin/product/add/size/1')}} " class="btn btn-warning">เพิ่ม Size สินค้า</a><br/><br/>
                     {{Form::open()}}
-                    <table class="table table-striped">
+                    <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Size/Color</th>
+                                <?php $i = 1;?>
                                 @foreach($pd_s as $s)
-                                    <th>{{$s->text}}</th>
+                                <th class="{{$i%2 == 1 ? 'black' : 'white'}}">{{$s->text}}</th>
+                                <?php $i++; ?>
                                 @endforeach
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody>   
                             @foreach($pd_c as $c)
                                 <tr>
                                     <td>{{$c->text}}</td>
+                                    <?php $i = 1;?>
                                     @foreach($pd_s as $s)
-                                        <td>
+                                        <td class="{{$i%2 == 1 ? 'black' : 'white'}}">
                                             {{ Form::text("amount[" . $stock[$c->id][$s->id]['code'] ."]",
                                             Input::old('amount['. $stock[$c->id][$s->id]['code'] .']'),
                                             ['class' => 'span1']) }}
@@ -41,8 +45,10 @@
                                             @else
                                             <span class="warning">{{$stock[$c->id][$s->id]['stock']}}</span>
                                             @endif
-                                            </strong>
+                                            </strong><br/>
+                                            SKU :: <strong>{{$s->text}}{{$c->code}}</strong>
                                         </td>
+                                        <?php $i++; ?>
                                     @endforeach
                                 </tr>   
                             @endforeach

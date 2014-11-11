@@ -22,7 +22,8 @@
                     <table class="table table-striped table-bordered table-condensed">
                     <thead>
                         <tr>
-                            <th style="width:10%" class="text-center">Size</th>
+                            <th style="width:5%" class="text-center">Size</th>
+                            <th style="width:10%" class="text-center">SKU</th>
                             <th style="width:10%" class="text-center">Stock</th>
                             <th class="text-center">Price</th>
                             <th colspan="3" class="text-center">Edit</th>
@@ -34,8 +35,8 @@
                         @foreach($product['size'] as $size)
                            <tr id="{{$size['id']}}">
                                 <td>{{$size['text']}}</td>
+                                <td>{{$size['text']}}{{$product['color']}}</td>
                                 <td>{{$size['stock']}}</td>
-
                                 <form method="post" class="form-horizontal row-fluid">
                                 <td><input autocomplete="off" name="price" type="text" value="{{$size['price']}}" class="span1">
                                     <button type="submit" class="btn btn-primary">แก้ไข</button>

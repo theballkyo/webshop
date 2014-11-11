@@ -2,10 +2,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
-<style>
-  body { font-family: DejaVu Sans, sans-serif; }
-</style>
 <body>
+	{{$time}}
 	<table style="width:100%; border-spacing:0px">
 		@foreach($orders as $order)
 		<tr>
@@ -16,6 +14,7 @@
 				@foreach($order['pd'] as $pd)
 					{{$pd['detail'][1]['data']['text']}} : {{$pd['detail'][0]['data']['code']}} 
 					x {{$pd['amount']}}
+					<br/>
 				@endforeach
 			</td>
 		</tr>

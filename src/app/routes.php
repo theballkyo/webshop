@@ -31,18 +31,18 @@ Route::get('/user/logout', 'UserController@getLogout');
  */
 Route::get('/admin/', 'AdminController@Index');
 
-Route::get('/admin/order/new', 'AdminController@newOrder');
-Route::post('/admin/order/new', 'AdminController@postNewOrder');
+Route::get('/admin/order/new', 'OrderController@newOrder');
+Route::post('/admin/order/new', 'OrderController@postNewOrder');
 
-Route::get('admin/order/print', 'AdminController@printOrder');
-Route::get('admin/order/print/view', 'AdminController@viewPrintOrder');
-Route::get('admin/order/print/re', 'AdminController@rePrintOrder');
+Route::get('admin/order/print', 'OrderController@printOrder');
+Route::get('admin/order/print/view', 'OrderController@viewPrintOrder');
+Route::get('admin/order/print/re', 'OrderController@rePrintOrder');
 
-Route::get('admin/order/view', 'AdminController@viewOrder');
-Route::get('admin/order/view/{id}', 'AdminController@showOrder');
-Route::post('admin/order/view/{id}', 'AdminController@postShowOrder');
-Route::get('admin/order/pay/{id}', 'AdminController@payOrder');
-Route::get('admin/order/cancel/{id}', 'AdminController@cancelOrder');
+Route::get('admin/order/view', 'OrderController@viewOrder');
+Route::get('admin/order/view/{id}', 'OrderController@showOrder');
+Route::post('admin/order/view/{id}', 'OrderController@postShowOrder');
+Route::get('admin/order/pay/{id}', 'OrderController@payOrder');
+Route::get('admin/order/cancel/{id}', 'OrderController@cancelOrder');
 
 Route::get('/admin/stocks', 'AdminController@getStocks');
 Route::get('/admin/stock/get/{pid}/{color}', 'AdminController@getStock');

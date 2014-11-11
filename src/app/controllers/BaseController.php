@@ -153,7 +153,7 @@ class BaseController extends Controller {
 		$field = ProductsDetailData::where('pid', '=', $pid);
 		if(!empty($fid))
 			$field->where('fid', '=', $fid);
-		return $field->get();
+		return $field->orderBy('code', 'ASC')->get();
 	}
 
 	/**

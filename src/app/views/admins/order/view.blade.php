@@ -13,11 +13,17 @@
                         <strong>Warning :: </strong>
                         ขณะนี้กำลังอยู่ช่วงทดสอบระบบอยู่อาจมีปัญหาบางอย่าง !
                     </div>
+                    @if(!empty(Session::get('msg')))
+                    <div class="alert warning">
+                        <strong>ข้อความ :: </strong>
+                        {{Session::get('msg')}}
+                    </div>
+                    @endif
                     <h3>ยินดีต้อนรับสู่ Sommai Stock Manager</h3>
                     *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ
                     <hr>
                     <a href="{{url('/admin/order/view?type=6')}}" class="btn btn-warning">ยังไม่จ่ายเงิน</a>
-                    <a href="{{url('/admin/order/view?type=3')}}" class="btn btn-warning">ยังไม่จ่ายเงิน นานกว่า 1 วัน</a>
+                    <a href="{{url('/admin/order/view?type=5')}}" class="btn">ส่งแล้ว</a>
                     <a href="{{url('/admin/order/view?type=1')}}" class="btn btn-success">จ่ายเงินแล้ว</a>
                     <a href="{{url('/admin/order/view?type=2')}}" class="btn btn-danger">ยกเลิกแล้ว</a>
                     <a href="{{url('/admin/order/view?type=4')}}" class="btn btn-info">ทั้งหมด</a>
@@ -58,7 +64,7 @@
                                 @elseif($order['type'] == 2)
                                 <button class="btn btn-danger">Cancel</button>
                                 @elseif($order['type'] == 3)
-                                <button class="btn">Not pay > 1 day</button>
+                                <button class="btn">Sender</button>
                                 @elseif($order['type'] == 5)
                                 <button class="btn"></button>
                                 @endif

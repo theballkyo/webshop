@@ -21,6 +21,7 @@
                         <thead>
                             <tr>
                                 <th>#ID</th>
+                                <th>SKU</th>
                                 <th>Name</th>
                                 <th>Size</th>
                                 <th>Color</th>
@@ -32,6 +33,9 @@
                             @foreach($products as $product)
                             <tr>
                                 <td>{{$i}}</td>
+                                <td>{{$product['detail'][1]['data']['text']}}::{{$product['detail'][0]['data']['code']}} x 
+                                    {{$product['amount']}}
+                                </td>
                                 <td>{{$product['name']}}</td>
                                 <td>{{$product['detail'][1]['data']['text']}}</td>
                                 <td>{{$product['detail'][0]['data']['text']}}</td>
