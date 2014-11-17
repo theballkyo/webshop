@@ -41,8 +41,11 @@ Route::get('admin/order/print/re', 'OrderController@rePrintOrder');
 Route::get('admin/order/view', 'OrderController@viewOrder');
 Route::get('admin/order/view/{id}', 'OrderController@showOrder');
 Route::post('admin/order/view/{id}', 'OrderController@postShowOrder');
+Route::get('admin/order/add/{id}', 'OrderController@add');
+Route::post('admin/order/add/{id}', 'OrderController@postAdd');
 Route::get('admin/order/pay/{id}', 'OrderController@payOrder');
 Route::get('admin/order/cancel/{id}', 'OrderController@cancelOrder');
+Route::any('admin/order/cancelr/{id}/{rid}', 'OrderController@cancelReserve');
 
 Route::get('/admin/stocks', 'AdminController@getStocks');
 Route::get('/admin/stock/get/{pid}/{color}', 'AdminController@getStock');
@@ -89,4 +92,4 @@ Route::post('admin/product/save', 'AdminController@postProductSave');
  */
 Route::get('/product/{pid}', 'ProductController@getProduct');
 Route::get('/test', 'TestController@Index');
-Route::get('/test2', 'TestController@test2');
+Route::get('/test2', 'OrderController@test');

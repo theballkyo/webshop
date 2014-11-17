@@ -21,7 +21,7 @@ class BaseController extends Controller {
 	{
 		$data_id = explode(',', $code);
 		# $detail['stock'] = $this->stockProduct($code);
-		$stock = ProductsStock::where('code', '=', $code)->remember(1)->first();
+		$stock = ProductsStock::where('code', '=', $code)->first();
 		//Not found product
 		if($stock == "")
 		{
@@ -67,16 +67,16 @@ class BaseController extends Controller {
 			$reserve = ProductsReserve::find($id);
 			$code = $this->deCode($reserve->code_id);
 
-			$product[$reserve->id] = Products::find($code[0])->first()->toArray();
-			$product[$reserve->id]['detail'] = $this->detailProduct($code[0], $code[1]);
+			$product[$id] = Products::find($code[0])->first()->toArray();
+			$product[$id]['detail'] = $this->detailProduct($code[0], $code[1]);
 
 			$stock = $this->loadStock($reserve->code_id);
 
-			$product[$reserve->id]['price'] = $stock->price;
-			$product[$reserve->id]['rid'] = $reserve->id;
-			$product[$reserve->id]['discount'] = $reserve->discount;
-			$product[$reserve->id]['dis_type'] = $reserve->discount_type;
-			$product[$reserve->id]['amount']   = $reserve->amount;
+			$product[$id]['price'] = $stock->price;
+			$product[$id]['rid'] = $reserve->id;
+			$product[$id]['discount'] = $reserve->discount;
+			$product[$id]['dis_type'] = $reserve->discount_type;
+			$product[$id]['amount']   = $reserve->amount;
 
 		}
 		return $product;

@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="color_hex">Color hex</label>              
+                            <label class="control-label" for="color_hex">Color No.</label>              
                             <div class="controls">
                                 <input id="color_hex" name="color_hex" type="text" class="span8">
                                 @if($errors->has('color_hex'))

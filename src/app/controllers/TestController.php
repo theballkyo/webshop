@@ -35,6 +35,19 @@ class TestController extends BaseController
 
 	public function test2()
 	{
-		dd(date('m/d/Y h:i:s a', time()));
+		for($i=0;$i<10000;$i++)
+		{
+			$order = New Order;
+			$order->cus_id = rand(11, 25);
+			$r = array();
+			for($j=0;$j<4;$j++)
+			{
+				$r[] = rand(10, 22);
+			}
+			$order->reserve_id = implode(',', $r);
+			$order->source = "Line";
+			$order->save();
+		}
+		#dd(date('m/d/Y h:i:s a', time()));
 	}
 }

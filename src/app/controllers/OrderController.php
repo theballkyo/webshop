@@ -47,7 +47,7 @@ class OrderController extends BaseController
 	{
 		Input::flash();
 
-		$rules = array('amount' => 'required');
+		$rules = array();
 		$cus_id = Input::get('old_cus');
 		if(empty($cus_id))
 		{
@@ -113,7 +113,8 @@ class OrderController extends BaseController
 							'order.id',
 							'order.updated_at',
 							'order.type',
-							'order.source'
+							'order.source',
+							'order.reserve_id'
 						)
 						->orderBy('id', 'DECS');
 		switch ($type) {
@@ -148,7 +149,15 @@ class OrderController extends BaseController
 				break;
 		}
 
-		$orders = $orders->paginate(30);
+		$orders = $orders->paginate(100);
+		$products = array();
+		foreach($orders as $order)
+		{
+			$rid = explode(',', $order['reserve_id']);
+			$products[$order->id] = $this->loadProductRID($rid);
+
+		}
+
 		#$orders = $orders->get()->toArray();
 
 		// for ($i=0;$i<$len;$i++) {
@@ -158,9 +167,9 @@ class OrderController extends BaseController
 		// 		$orders[$i]['detail'] = $this->loadProductFromCode($r);
 		// 	}
 		// }
-		// print '<pre>';
-		// dd($orders);
-		return View::make('admins.order.view', ['orders' => $orders]);
+		# print '<pre>';
+		# dd($products);
+		return View::make('admins.order.view', ['orders' => $orders, 'products' => $products]);
 	}
 
 	/**
@@ -174,7 +183,9 @@ class OrderController extends BaseController
 							'customer_profile.name',
 							'customer_profile.tel',
 							'customer_profile.address',
-							'order.id',
+							'customer_profile.email',
+							'customer_profile.note',
+							'customer_profile.id',
 							'order.updated_at',
 							'order.reserve_id',
 							'order.type',
@@ -185,11 +196,11 @@ class OrderController extends BaseController
 						->first()
 						->toArray();
 		$rid = explode(',', $order['reserve_id']);
-
+		$order_id = $id;
 		$products = $this->loadProductRID($rid);
 		# print '<pre>';
 		# dd($products);
-		return View::make('admins.order.show', ['products' => $products, 'order' => $order]);
+		return View::make('admins.order.show', ['products' => $products, 'order' => $order, 'order_id' => $order_id]);
 	}
 
 	/**
@@ -363,4 +374,155 @@ class OrderController extends BaseController
 		# $pdf = PDF::load($html, 'A4', 'portrait')->output();
 	}
 
+	/**
+	 * Cancel Reserve product in Order
+	 *
+	 */
+	public function cancelReserve($id, $rid)
+	{
+		$order = Order::find($id);
+
+		$reserve = $order->reserve_id;
+		$n_reserve = explode(',', $reserve);
+
+		if(($key = array_search($rid, $n_reserve)) !== false) {
+		    unset($n_reserve[$key]);
+		}
+
+		$order->reserve_id = implode(',', $n_reserve);
+		$order->save();
+
+		return Redirect::back();
+	}
+
+	/**
+	 * Add products to order
+	 *
+	 */
+	public function add($id)
+	{
+		$pid = 1;
+		$detail = [
+			'pd_c' => $this->getField($pid, 1),
+		    'pd_s' => $this->getField($pid, 2),
+		];
+		foreach ($detail['pd_c'] as $c) {
+			foreach ($detail['pd_s'] as $s) {
+				$code = $this->generateCode($pid, array($c->id, $s->id));
+				$stock = $this->stockProduct($code);
+				$detail['stock'][$c->id][$s->id]['stock'] = $stock->stock;
+				$detail['stock'][$c->id][$s->id]['code'] = $stock->id;
+			}
+		}
+		# print '<pre>';
+		# dd($detail['pd_s'][0]);
+		return View::make('admins.order.add', $detail);	
+	}
+
+	/**
+	 * POST Add products to order
+	 *
+	 */
+	public function postAdd($oid)
+	{
+		$order = Order::find($oid);
+		if($order->count() < 1)
+		{
+			return Redirect::action('OrderController@showOrder', array($oid));
+		}
+		$r = explode(',', $order->reserve_id);
+		foreach (Input::get('amount') as $id => $amount) {
+			if((int) $amount > 0)
+			{
+				$stock = ProductsStock::find($id);
+				$stock->stock -= abs($amount);
+				$stock->save();
+
+				$reserve = New ProductsReserve;
+				$reserve->stock_id = $stock->id;
+				$reserve->code_id = $stock->code;
+				$reserve->amount = $amount;
+				$reserve->cus_id = $order->cus_id;
+				$reserve->save();
+				$r[] = $reserve->id;
+			}
+		}
+
+		$order->reserve_id = implode(',', $r);
+		$order->save();
+
+		Session::flash('msg', 'เพิ่มสินค้าแล้ว');
+		return Redirect::action('OrderController@showOrder', array($oid));
+	}
+
+	public function test()
+	{
+		$type = !empty(Input::get('type')) ? Input::get('type') : 4;
+
+		$orders = Order::join('customer_profile', 'customer_profile.id', '=', 'order.cus_id')
+						->select(
+							'customer_profile.name',
+							'customer_profile.tel',
+							'order.id',
+							'order.updated_at',
+							'order.type',
+							'order.source',
+							'order.reserve_id'
+						)
+						->orderBy('id', 'DECS');
+		switch ($type) {
+			case 6:
+				# Order is waiting for payment
+				$orders->where('type', '=', 0);
+				break;
+			case 1:
+				# Order is pay
+				$orders->where('type', '=', 1);
+				break;
+			case 2:
+				# Order is cancelled
+				$orders->where('type', '=', 2);
+				break;
+			case 3:
+				# Order open time > 1 Day
+				$date = new DateTime();
+				$date->setTimestamp($date->getTimestamp() - (60*60*24));
+		
+				$orders->where('type', '=', 0);
+				$orders->where('updated_at', '<', $date->format('Y-m-d H:i:s'));
+				break;
+			case 4:
+				# All orders
+				break;
+			case 5:
+				# Order is sender
+				$orders->where('type' ,'=', 3);
+				break;
+			default:
+				break;
+		}
+
+		$orders = $orders->remember(1)->paginate(5000);
+		$products = array();
+		// foreach($orders as $order)
+		// {
+		// 	$rid = explode(',', $order['reserve_id']);
+
+		// 	$products[$order->id] = $this->loadProductRID($rid);
+		// }
+	
+		return Response::json($orders);
+		#$orders = $orders->get()->toArray();
+
+		// for ($i=0;$i<$len;$i++) {
+		// 	$reserve = explode(',' ,$orders[$i]['reserve_id']);
+		// 	foreach ($reserve as $r)
+		// 	{
+		// 		$orders[$i]['detail'] = $this->loadProductFromCode($r);
+		// 	}
+		// }
+		# print '<pre>';
+		# dd($products);
+		return View::make('admins.order.view', ['orders' => $orders, 'products' => $products]);
+	}
 }

@@ -7,8 +7,9 @@
         <title>Sommai - Admin CP</title>
         <link type="text/css" href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
         <link type="text/css" href="{{asset('bootstrap/css/bootstrap-responsive.min.css')}}" rel="stylesheet">
-        <link type="text/css" href="{{asset('css/theme.css')}}" rel="stylesheet">
+        <link type="text/css" href="{{asset('css/theme.css')}}?ver=1002" rel="stylesheet">
         <link type="text/css" href="{{asset('images/icons/css/font-awesome.css')}}" rel="stylesheet">
+        <link type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" rel="stylesheet">
         <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
             rel='stylesheet'>
     </head>
@@ -86,12 +87,13 @@
         <script src="{{asset('scripts/jquery-1.9.1.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/jquery-ui-1.10.1.custom.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
+        <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
         <!--
         <script src="{{asset('scripts/flot/jquery.flot.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/flot/jquery.flot.resize.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/common.js" type="text/javascript')}}"></script>
-        -->
         <script src="{{asset('scripts/datatables/jquery.dataTables.js')}}" type="text/javascript"></script>
+        -->
         <script type="text/javascript">
         function GetClock(){
             tzOffset = {{date('Z')/60/60}};//set this to the number of hours offset from UTC

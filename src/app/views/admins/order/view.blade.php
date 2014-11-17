@@ -19,8 +19,7 @@
                         {{Session::get('msg')}}
                     </div>
                     @endif
-                    <h3>ยินดีต้อนรับสู่ Sommai Stock Manager</h3>
-                    *Note ลบข้อมูลลูกค้ายังทำไม่เสร็จ
+                    <a href="{{url('/admin/order/new')}}" class="btn btn-warning">เพิ่ม Order ใหม่</a>
                     <hr>
                     <a href="{{url('/admin/order/view?type=6')}}" class="btn btn-warning">ยังไม่จ่ายเงิน</a>
                     <a href="{{url('/admin/order/view?type=5')}}" class="btn">ส่งแล้ว</a>
@@ -28,17 +27,21 @@
                     <a href="{{url('/admin/order/view?type=2')}}" class="btn btn-danger">ยกเลิกแล้ว</a>
                     <a href="{{url('/admin/order/view?type=4')}}" class="btn btn-info">ทั้งหมด</a>
                     <br/><br/>
-                    <a href="{{url('admin/order/print')}}" class="btn btn-success">Print orders</a>
-                    <a href="{{url('admin/order/print/re')}}" class="btn btn-info">Reprint orders</a>
+                    <a href="{{url('admin/order/print')}}" target="_blank" class="btn btn-success">Print orders</a>
+                    <a href="{{url('admin/order/print/re')}}" target="_blank" class="btn btn-info">Reprint orders</a>
                     <br/>
-                    <table class="table table-striped">
+                    <?php echo $orders->links(); ?>
+                    <br/>
+                    <table class="table table-striped table-bordered" id="vieworder">
                     	<thead>
                     		<tr>
-                    			<th>#ID</th>
+                    			<th width="3%">#ID</th>
+                                <th>SKU</th>
+                                <th>Price</th>
                     			<th>Name</th>
                                 <th>Source</th>
                     			<th>Time</th>
-                                <th>View / Pay / Cancel</th>
+                                <th>View / Edit</th>
                                 <th>Type</th>
                     		</tr>
                     	</thead>
@@ -46,14 +49,21 @@
 		                    @foreach($orders as $order)
 		                    <tr>
 		                    	<td>{{$order['id']}}</td>
+                                <td>
+                                <?php $total = 0;?>
+                                @foreach($products[$order['id']] as $pd)
+                                    {{$pd['detail'][1]['data']['text']}}{{$pd['detail'][0]['data']['code']}} x {{$pd['amount']}} <br/>
+                                <?php $total += $pd['price']; ?>
+                                @endforeach
+                                <td>{{$total}} บาท</td>
+                                </td>
 		                    	<td>{{$order['name']}}</td>
                                 <td>{{$order['source']}}</td>
 		                    	<td>{{$order['updated_at']}}</td>
                                 <td>
                                     <a href="{{url('/admin/order/view/'. $order['id'])}}" class="btn btn-primary">ดูสินค้า</a>
                                     @if($order['type'] == 0)
-                                    <a href="{{url('/admin/order/pay/'. $order['id'])}}" class="btn btn-success">จ่ายเงินแล้ว</a>
-                                    <a href="{{url('/admin/order/cancel/'. $order['id'])}}" class="btn btn-danger">ยกเลิก Order</a>
+                                    <a href="{{url('/admin/order/cancel/'. $order['id'])}}" class="btn btn-danger">ยกเลิก</a>
                                     @endif
                                 </td>
                                 <td>
@@ -81,4 +91,16 @@
     @include('layouts.admin-nav')
     <!--/.span9-->
 </div>
+@stop
+@section('script')
+<script type="text/javascript">
+$(document).ready(function(){
+    var oTable = $('#vieworder').DataTable({
+        "iDisplayLength" : 100,
+        "order": [[ 0, "desc" ]]
+    });
+    a = $('#vieworder_filter input:text').val();
+    //alert(a);
+});
+</script>
 @stop

@@ -1706,3 +1706,6 @@ li.clock > a {
 .black{
 	background-color: #f6f6f6 !important;
 }
+.table td{
+	vertical-align: middle;
+}

@@ -11,7 +11,7 @@ class AdminController extends BaseController{
 
 	public function Index()
 	{
-		return Redirect::action('OrderController@newOrder');
+		return Redirect::action('OrderController@viewOrder');
 		Session::flash('error', 'True');
 		Session::push('error.msg', 'developers');
 		Session::push('error.msg', 'developers2');
