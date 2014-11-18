@@ -35,6 +35,7 @@
                     <table class="table table-striped table-bordered" id="vieworder">
                     	<thead>
                     		<tr>
+                                <th>#ID</th>
                     			<th>Time</th>
                                 <th>Source</th>
                     			<th>Name</th>
@@ -46,6 +47,7 @@
                     	<tbody>
 		                    @foreach($orders as $order)
 		                    <tr>
+                                <td>{{$order['id']}}</td>
 		                    	<td>{{$order['updated_at']}}</td>
                                 <td>{{$order['source']}}</td>
 		                    	<td>{{$order['name']}}</td>

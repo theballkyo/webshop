@@ -4,6 +4,7 @@ class BaseController extends Controller {
 
 	protected $stock;
 	protected $cache_pd = [];
+
 	/**
 	 * Setup the layout used by the controller.
 	 *
@@ -53,6 +54,7 @@ class BaseController extends Controller {
 	 */
 	protected function loadProductRID($rid)
 	{
+		$product = array();
 		if(!is_array($rid))
 		{
 			$code = ProductsReserve::find($rid)->code_id;
@@ -65,18 +67,22 @@ class BaseController extends Controller {
 		foreach ($rid as $id)
 		{
 			$reserve = ProductsReserve::find($id);
-			$code = $this->deCode($reserve->code_id);
+			if(!empty($reserve))
+			{
+				$code = $this->deCode($reserve->code_id);
 
-			$product[$id] = Products::find($code[0])->first()->toArray();
-			$product[$id]['detail'] = $this->detailProduct($code[0], $code[1]);
+				$product[$id] = Products::find($code[0])->first()->toArray();
+				$product[$id]['detail'] = $this->detailProduct($code[0], $code[1]);
 
-			$stock = $this->loadStock($reserve->code_id);
+				$stock = $this->loadStock($reserve->code_id);
 
-			$product[$id]['price'] = $stock->price;
-			$product[$id]['rid'] = $reserve->id;
-			$product[$id]['discount'] = $reserve->discount;
-			$product[$id]['dis_type'] = $reserve->discount_type;
-			$product[$id]['amount']   = $reserve->amount;
+				$product[$id]['price'] = $stock->price;
+				$product[$id]['rid'] = $reserve->id;
+				$product[$id]['discount'] = $reserve->discount;
+				$product[$id]['dis_type'] = $reserve->discount_type;
+				$product[$id]['amount']   = $reserve->amount;
+			}
+		
 
 		}
 		return $product;

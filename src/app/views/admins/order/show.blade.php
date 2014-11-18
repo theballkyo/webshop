@@ -40,6 +40,7 @@
                                 <th>Size</th>
                                 <th>Color</th>
                                 <th>Price / Amount</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,12 +55,13 @@
                                 <td>{{$product['detail'][1]['data']['text']}}</td>
                                 <td>{{$product['detail'][0]['data']['text']}}</td>
                                 <td>{{$product['price']}} บาท / {{$product['amount']}} ชิ้น</td>
+                                <td><a class="btn btn-danger" href="{{url('/admin/order/cancelr/'.$order_id.'/'.$product['rid'])}}">Delete</a></td>
                             </tr>
                             <?php
                             $total += $product['price'] * $product['amount'];$i++;?>
                             @endforeach
                             <tr>
-                                <td colspan="5" class="black"></td>
+                                <td colspan="6" class="black"></td>
                                 <td class="black">Total Price {{$total}} บาท</td>
                             </tr>
                         </tbody>
