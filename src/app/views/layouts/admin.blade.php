@@ -80,7 +80,7 @@
         <!--/.wrapper-->
         <div class="footer">
             <div class="container">
-                <b class="copyright">&copy; 2014 Sommai</b>All rights reserved. Version :: 0.8.1 beta
+                <b class="copyright">&copy; 2014 Sommai </b>All rights reserved. Version :: 0.9 beta
                 <p>{{PHP_Timer::resourceUsage()}}</p>
             </div>
         </div>

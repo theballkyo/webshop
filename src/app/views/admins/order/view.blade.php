@@ -35,36 +35,26 @@
                     <table class="table table-striped table-bordered" id="vieworder">
                     	<thead>
                     		<tr>
-                    			<th width="3%">#ID</th>
-                                <th>SKU</th>
-                                <th>Price</th>
-                    			<th>Name</th>
-                                <th>Source</th>
                     			<th>Time</th>
+                                <th>Source</th>
+                    			<th>Name</th>
+                                <th>SKU</th>
+                                <th>Status</th>
                                 <th>View / Edit</th>
-                                <th>Type</th>
                     		</tr>
                     	</thead>
                     	<tbody>
 		                    @foreach($orders as $order)
 		                    <tr>
-		                    	<td>{{$order['id']}}</td>
+		                    	<td>{{$order['updated_at']}}</td>
+                                <td>{{$order['source']}}</td>
+		                    	<td>{{$order['name']}}</td>
                                 <td>
                                 <?php $total = 0;?>
                                 @foreach($products[$order['id']] as $pd)
                                     {{$pd['detail'][1]['data']['text']}}{{$pd['detail'][0]['data']['code']}} x {{$pd['amount']}} <br/>
                                 <?php $total += $pd['price']; ?>
                                 @endforeach
-                                <td>{{$total}} บาท</td>
-                                </td>
-		                    	<td>{{$order['name']}}</td>
-                                <td>{{$order['source']}}</td>
-		                    	<td>{{$order['updated_at']}}</td>
-                                <td>
-                                    <a href="{{url('/admin/order/view/'. $order['id'])}}" class="btn btn-primary">ดูสินค้า</a>
-                                    @if($order['type'] == 0)
-                                    <a href="{{url('/admin/order/cancel/'. $order['id'])}}" class="btn btn-danger">ยกเลิก</a>
-                                    @endif
                                 </td>
                                 <td>
                                 @if($order['type'] == 0)
@@ -78,7 +68,13 @@
                                 @elseif($order['type'] == 5)
                                 <button class="btn"></button>
                                 @endif
-                                </td>       
+                                </td>     
+                                <td>
+                                    <a href="{{url('/admin/order/view/'. $order['id'])}}" class="btn btn-primary">ดูสินค้า</a>
+                                    @if($order['type'] == 0)
+                                    <a href="{{url('/admin/order/cancel/'. $order['id'])}}" class="btn btn-danger">ยกเลิก</a>
+                                    @endif
+                                </td>  
 		                    </tr>
 		                    @endforeach
                     	</tbody>
