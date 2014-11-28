@@ -80,7 +80,7 @@
         <!--/.wrapper-->
         <div class="footer">
             <div class="container">
-                <b class="copyright">&copy; 2014 Sommai </b>All rights reserved. Version :: 0.9 beta
+                <b class="copyright">&copy; 2014 Sommai </b>All rights reserved. Version :: 0.9.2 beta
                 <p>{{PHP_Timer::resourceUsage()}}</p>
             </div>
         </div>
@@ -123,7 +123,7 @@
             if(nsec <= 9) {nsec = "0" +nsec;}
 
 
-            document.getElementById('clockbox').innerHTML="ขณะนี้เวลา :: "+ndate+"/"+(nmonth+1)+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
+            document.getElementById('clockbox').innerHTML=""+ndate+"/"+(nmonth+1)+"/"+nyear+" "+nhour+":"+nmin+":"+nsec+ap+"";
             setTimeout(function(){GetClock()}, 1000); 
 
             }

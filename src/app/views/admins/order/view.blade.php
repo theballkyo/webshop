@@ -35,13 +35,13 @@
                     <table class="table table-striped table-bordered" id="vieworder">
                     	<thead>
                     		<tr>
-                                <th>#ID</th>
-                    			<th>Time</th>
-                                <th>Source</th>
-                    			<th>Name</th>
-                                <th>SKU</th>
-                                <th>Status</th>
-                                <th>View / Edit</th>
+                                <th width="2%">#ID</th>
+                    			<th width="15%">Time</th>
+                                <th width="5%">Source</th>
+                    			<th width="25%">Name</th>
+                                <th width="5%">SKU</th>
+                                <th width="1%">Status</th>
+                                <th width="10%">View / Edit</th>
                     		</tr>
                     	</thead>
                     	<tbody>
@@ -60,13 +60,13 @@
                                 </td>
                                 <td>
                                 @if($order['type'] == 0)
-                                <button class="btn btn-warning">Not pay</button>
+                                <button class="btn btn-warning">ยังไม่จ่ายเงิน</button>
                                 @elseif($order['type'] == 1)
-                                <button class="btn btn-success">Pay</button>
+                                <button class="btn btn-success">จ่ายเงินแล้ว</button>
                                 @elseif($order['type'] == 2)
-                                <button class="btn btn-danger">Cancel</button>
+                                <button class="btn btn-danger">ยกเลิกแล้ว</button>
                                 @elseif($order['type'] == 3)
-                                <button class="btn">Sender</button>
+                                <button class="btn">ส่งแล้ว</button>
                                 @elseif($order['type'] == 5)
                                 <button class="btn"></button>
                                 @endif

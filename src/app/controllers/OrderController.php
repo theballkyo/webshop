@@ -178,6 +178,11 @@ class OrderController extends BaseController
 	 */
 	public function showOrder($id)
 	{
+		if(!empty(Session::get('success')))
+		{
+			return Redirect::action('OrderController@viewOrder');
+		}
+
 		$order = Order::join('customer_profile', 'customer_profile.id', '=', 'order.cus_id')
 						->select(
 							'customer_profile.name',
@@ -222,8 +227,8 @@ class OrderController extends BaseController
 		}
 		$order->type = 1;
 		$order->save();
-
-		return Redirect::back()->with('msg', "Order #$order->id is pay");
+		return Redirect::action('OrderController@viewOrder');
+		#return Redirect::back()->with('msg', "Order #$order->id is pay");
 	}
 
 	/**
@@ -236,17 +241,22 @@ class OrderController extends BaseController
 		$order = Order::find($id);
 		$rid = explode(',', $order->reserve_id);
 
-		$len = count($rid);
 		foreach($rid as $r)
 		{
 			$reserve = ProductsReserve::find($r);
+
 			$reserve->type = 2;
 			$reserve->save();
+
+			$s = ProductsStock::where('code', '=', $reserve->code_id)->first();
+			$s->stock += $reserve->amount;
+			$s->save();
+
 		}
 		$order->type = 2;
 		$order->save();
-
-		return Redirect::back()->with('msg', "Order #$order->id is cancel");
+		return Redirect::action('OrderController@viewOrder');
+		# return Redirect::back()->with('msg', "Order #$order->id is cancel");
 	}
 
 	/**
@@ -384,6 +394,14 @@ class OrderController extends BaseController
 
 		$reserve = $order->reserve_id;
 		$n_reserve = explode(',', $reserve);
+
+		$r = ProductsReserve::find($rid);
+		$r->type = 2;
+
+		$s = ProductsStock::where('code', '=', $r->code_id)->first();
+		$s->stock += $r->amount;
+		$s->save();
+		$r->save();
 
 		if(($key = array_search($rid, $n_reserve)) !== false) {
 		    unset($n_reserve[$key]);

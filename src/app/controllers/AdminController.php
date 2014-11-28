@@ -537,7 +537,9 @@ class AdminController extends BaseController{
 		$customer->tel = Input::get('tel');
 		$customer->note = Input::get('note');
 		$customer->save();
-		Session::flash('success', '');
+
+		Session::flash('success', 'abcd');
+
 		return Redirect::back();
 	}
 

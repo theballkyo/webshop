@@ -67,8 +67,7 @@
                         </tbody>
                     </table>
                     <hr>
-                    <form class="form-horizontal row-fluid" method="post" action="{{url('/admin/customer/'.$order['id'])}}"
-                                onsubmit="return confirm('คุณต้องการแก้ไขข้อมูลนี้หรือไม่ ?');">
+                    <form class="form-horizontal row-fluid" method="post" action="{{url('/admin/customer/'.$order['id'])}}">
                         <div class="control-group">
                             <label class="control-label" for="basicinput">Name</label>
                             <div class="controls">
