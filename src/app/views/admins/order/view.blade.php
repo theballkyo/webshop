@@ -36,8 +36,8 @@
                     	<thead>
                     		<tr>
                                 <th width="2%">#ID</th>
-                    			<th width="15%">Time</th>
-                                <th width="5%">Source</th>
+                    			<th width="5%">Time</th>
+                                <th width="4%">Source</th>
                     			<th width="25%">Name</th>
                                 <th width="5%">SKU</th>
                                 <th width="1%">Status</th>
@@ -48,7 +48,8 @@
 		                    @foreach($orders as $order)
 		                    <tr>
                                 <td>{{$order['id']}}</td>
-		                    	<td>{{$order['updated_at']}}</td>
+                                <?php $timestamp = strtotime($order['updated_at']);?>
+		                    	<td>{{date('d-m-Y', $timestamp)}}</td>
                                 <td>{{$order['source']}}</td>
 		                    	<td>{{$order['name']}}</td>
                                 <td>
@@ -67,8 +68,10 @@
                                 <button class="btn btn-danger">ยกเลิกแล้ว</button>
                                 @elseif($order['type'] == 3)
                                 <button class="btn">ส่งแล้ว</button>
+                                @elseif($order['type'] == 4)
+                                <button class="btn">รอส่ง</button>
                                 @elseif($order['type'] == 5)
-                                <button class="btn"></button>
+                                <button class="btn btn-success">รอของมา</button>
                                 @endif
                                 </td>     
                                 <td>

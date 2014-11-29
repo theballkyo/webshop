@@ -10,7 +10,8 @@
         <link type="text/css" href="{{asset('css/theme.css')}}?ver=1002" rel="stylesheet">
         <link type="text/css" href="{{asset('images/icons/css/font-awesome.css')}}" rel="stylesheet">
         <link type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" rel="stylesheet">
-        <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
+        <link href="{{asset('js/select2.css')}}" rel="stylesheet"/>
+        <link type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600'
             rel='stylesheet'>
     </head>
     <body>
@@ -88,6 +89,7 @@
         <script src="{{asset('scripts/jquery-ui-1.10.1.custom.min.js')}}" type="text/javascript"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
         <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+        <script src="{{asset('js/select2.min.js')}}"></script>
         <!--
         <script src="{{asset('scripts/flot/jquery.flot.js')}}" type="text/javascript"></script>
         <script src="{{asset('scripts/flot/jquery.flot.resize.js')}}" type="text/javascript"></script>

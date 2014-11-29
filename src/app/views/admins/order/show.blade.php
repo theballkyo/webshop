@@ -24,6 +24,7 @@
                     <a href="{{url('/admin/order/add/'. $order_id)}}" class="btn btn-info">เพิ่มสินค้า</a>
                     <a href="{{url('/admin/order/pay/'. $order_id)}}" class="btn btn-success">จ่ายเงินแล้ว</a>
                     <a href="{{url('/admin/order/cancel/'. $order_id)}}" class="btn btn-danger">ยกเลิก Order</a>
+                    <a href="{{url('/admin/order/cancel/'. $order_id)}}" class="btn btn-danger">รอของมา</a>
                     @elseif($order['type'] == 1)
                     <button class="btn btn-success">Order นี้ชำระเงินเรียบร้อยแล้ว</button>
                     @elseif($order['type'] == 2)
@@ -67,7 +68,32 @@
                         </tbody>
                     </table>
                     <hr>
-                    <form class="form-horizontal row-fluid" method="post" action="{{url('/admin/customer/'.$order['id'])}}">
+                    <form class="form-horizontal row-fluid" method="post">
+
+                        <div class="control-group">
+                            {{Form::label('status', 'สถานะ', ['class' => 'control-label'])}}
+                            <div class="controls">
+                                <select name="status" tabindex="1" data-placeholder="สถานะ" class="span11">
+                                    <option value="0" {{$order['type'] == 0 ? 'selected' : ''}}>รอจ่ายเงิน</option>
+                                    <option value="1" {{$order['type'] == 1 ? 'selected' : ''}}>จ่ายเงินแล้ว</option>
+                                    <option value="2" {{$order['type'] == 2 ? 'selected' : ''}}>ยกเลิก Order</option>
+                                    <option value="3" {{$order['type'] == 3 ? 'selected' : ''}}>ส่งแล้ว</option>
+                                    <option value="5" {{$order['type'] == 5 ? 'selected' : ''}}>รอของมา</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            {{Form::label('shipping', 'Shipping', ['class' => 'control-label'])}}
+                            <div class="controls">
+                                <select name="shipping" tabindex="1" data-placeholder="shipping" class="span11">
+                                    <option value="1" {{$order['shipping'] == 1 ? 'selected' : ''}}>EMS</option>
+                                    <option value="2" {{$order['shipping'] == 2 ? 'selected' : ''}}>Register</option>
+                                    <option value="3" {{$order['shipping'] == 3 ? 'selected' : ''}}>รับเอง</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="control-group">
                             <label class="control-label" for="basicinput">Name</label>
                             <div class="controls">
@@ -103,7 +129,7 @@
                         </div>
                         <div class="control-group">
                             <div class="controls">
-                                <button type="submit" class="btn btn-info btn-large">Edit profile</button>
+                                <button type="submit" class="btn btn-info btn-large">แก้ไข</button>
                             </div>
                         </div>
                         {{Form::token()}}

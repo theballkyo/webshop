@@ -11,6 +11,6 @@
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ /shop/index.php [L]
+    RewriteRule ^ /webshop/index.php [L]
     
 </IfModule>

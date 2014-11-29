@@ -40,7 +40,7 @@ Route::get('admin/order/print/re', 'OrderController@rePrintOrder');
 
 Route::get('admin/order/view', 'OrderController@viewOrder');
 Route::get('admin/order/view/{id}', 'OrderController@showOrder');
-Route::post('admin/order/view/{id}', 'OrderController@postShowOrder');
+Route::post('admin/order/view/{id}', 'OrderController@postUpdateOrder');
 Route::get('admin/order/add/{id}', 'OrderController@add');
 Route::post('admin/order/add/{id}', 'OrderController@postAdd');
 Route::get('admin/order/pay/{id}', 'OrderController@payOrder');

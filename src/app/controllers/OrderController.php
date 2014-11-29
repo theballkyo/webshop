@@ -49,6 +49,12 @@ class OrderController extends BaseController
 
 		$rules = array();
 		$cus_id = Input::get('old_cus');
+
+		if(empty(Input::get('amount')))
+		{
+			Session::flash('msg', 'กรุณาเพิ่มสินค้าด้วย');
+			return Redirect::action('OrderController@newOrder');
+		}
 		if(empty($cus_id))
 		{
 			$rules = array_add($rules, 'name', 'required');
@@ -93,6 +99,8 @@ class OrderController extends BaseController
 		$order->reserve_id = implode(',', $reserve_id);
 		$order->cus_id = $cus_id;
 		$order->source = $this->source[Input::get('source')];
+		$order->type = Input::get('status');
+		$order->shipping = Input::get('shipping');
 		$order->save();
 
 		return Redirect::action('OrderController@viewOrder')->with('msg', 'Created Order!');
@@ -194,7 +202,8 @@ class OrderController extends BaseController
 							'order.updated_at',
 							'order.reserve_id',
 							'order.type',
-							'order.source'
+							'order.source',
+							'order.shipping'
 						)
 						->where('order.id', '=', $id)
 						->orderBy('id', 'DECS')
@@ -471,6 +480,44 @@ class OrderController extends BaseController
 
 		Session::flash('msg', 'เพิ่มสินค้าแล้ว');
 		return Redirect::action('OrderController@showOrder', array($oid));
+	}
+
+	/**
+	 * POST -> Update order
+	 */
+	public function postUpdateOrder($id)
+	{
+		$validator = Validator::make(
+						Input::all(),
+						array(
+							'name' => 'required'
+						)
+		);
+
+		# Validator input
+		if($validator->fails())
+		{
+			return Redirect::back()->withErrors($validator->messages());
+		}
+		$order = Order::find($id);
+		$customer = CustomerProfile::find($order->cus_id);
+		$customer->name = Input::get('name');
+		$customer->address = Input::get('address');
+		$customer->email = Input::get('email');
+		$customer->tel = Input::get('tel');
+		$customer->note = Input::get('note');
+		$customer->save();
+
+		if(Input::has('status'))
+		{
+			$order->type = Input::get('status');
+			$order->shipping = Input::get('shipping');
+			$order->save();
+		}
+
+		Session::flash('success', 'abcd');
+
+		return Redirect::back();
 	}
 
 	public function test()

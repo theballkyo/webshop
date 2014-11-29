@@ -30,6 +30,9 @@ class UserController extends BaseController{
 				Auth::logout();
 				return View::make('user.getLogin', array('error_msg' => 'This user can\'t login.'));
 			}
+			if(Auth::user()->status == 1)
+				return Redirect::action('AdminController@Index');
+
 			return Redirect::to('user/login');
 		}
 		return View::make('user.getLogin', array('error_msg' => 'Username or passwor not correct!'));
