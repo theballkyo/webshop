@@ -9,7 +9,9 @@ To do
 - [X] Function Manage Stock
 - [ ] Function Add Product
 - [X] Function Remove Color, Size, Product
-- [ ] Reserve system in admin panel *
+- [X] Reserve system in admin panel *
 - [ ] Create user type profile -- only admin can create *
 - [ ] Upload image of product
 - [ ] ETC
+
+- [X] Order systems
